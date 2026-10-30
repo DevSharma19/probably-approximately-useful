@@ -74,5 +74,8 @@
     draw();
   }
 
-  document.querySelectorAll("[data-widget=growth]").forEach(mount);
+  // Register with nav.js, which mounts every [data-widget="growth"] (including
+  // ones inserted later by the single-scroll index page).
+  (window.WIDGETS ||= {}).growth = mount;
+  mountWidgets();
 })();

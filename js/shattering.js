@@ -205,5 +205,8 @@
     update();
   }
 
-  document.querySelectorAll("[data-widget=shattering]").forEach(mount);
+  // Register with nav.js, which mounts every [data-widget="shattering"] (including
+  // ones inserted later by the single-scroll index page).
+  (window.WIDGETS ||= {}).shattering = mount;
+  mountWidgets();
 })();

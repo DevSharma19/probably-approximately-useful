@@ -6,7 +6,7 @@
   <title>Probably Approximately Useful</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="index" data-root="">
@@ -25,6 +25,7 @@
     asymptotic notation, and basic discrete probability (union bound, expectation, concentration).
     No machine learning background is needed.</p>
 
+  <div id="toc">
   <h2>Chapters</h2>
   <ol>
     <li><a href="chapters/1-pac.html">Learning from Samples</a>: the PAC model and finite hypothesis classes</li>
@@ -34,8 +35,15 @@
     <li><a href="chapters/5-fundamental-theorem.html">The Fundamental Theorem</a>: finite VC dimension ⇔ PAC learnable</li>
     <li><a href="chapters/6-beyond.html">Beyond</a>: computational efficiency and further directions</li>
   </ol>
-  <p>Each chapter ends with exercises; solutions are hidden until you click.</p>
+  </div>
+  <p>Each chapter ends with exercises; solutions are hidden until you click.
+    Scroll down to read the whole site in one go, or jump to a chapter from the bar at the top.</p>
+
+  <!-- nav.js loads every chapter in here (single-scroll view) -->
+  <div id="chapters"></div>
 </main>
 <script src="js/nav.js"></script>
+<script src="js/shattering.js"></script>
+<script src="js/growth.js"></script>
 </body>
 </html>

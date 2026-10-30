@@ -10,6 +10,7 @@
 }
 
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -119,4 +120,23 @@ nav.pager {
   .widget select { max-width: 100%; }
   nav.pager { flex-direction: column; gap: 0.6rem; }
   nav.pager a:last-child { text-align: right; }
+}
+
+/* Sticky nav + single-scroll sections */
+header.site {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(253, 253, 251, 0.95);
+  backdrop-filter: blur(4px);
+}
+header.site a.current { color: var(--accent); }
+section.chapter {
+  scroll-margin-top: 4.5rem;
+  border-top: 2px solid var(--border);
+  margin-top: 3rem;
+  padding-top: 1rem;
+}
+@media (max-width: 640px) {
+  section.chapter { scroll-margin-top: 3rem; }
 }
