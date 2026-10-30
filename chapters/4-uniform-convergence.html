@@ -13,6 +13,24 @@
 <main>
   <h1>4. Uniform Convergence</h1>
 
+  <div class="todo todo-main">
+    <p class="todo-title">To do: Chapter 4</p>
+    <p><strong>Write</strong></p>
+    <ul>
+      <li>Motivation: why concentration for one fixed $h$ is not enough (ERM picks $h$ <em>after</em> seeing $S$).</li>
+      <li>Proof of the "Representative ⇒ ERM succeeds" lemma.</li>
+      <li>Decide: full proof or careful sketch of finite VC ⇒ uniform convergence, then write it.</li>
+      <li>Solutions to Exercises 4.1 and 4.2.</li>
+    </ul>
+    <p><strong>Proof-check</strong></p>
+    <ul>
+      <li>This chapter uses $L_{\mathcal{D}}$ and $\min_h L_{\mathcal{D}}(h)$, i.e. the agnostic setting. Make sure it is defined first.</li>
+      <li>Exercise 4.2 constant: $\ln(2|\mathcal{H}|/\delta)/(2\varepsilon^2)$ (SSBD Cor. 4.6).</li>
+      <li>Symmetrization outline vs. SSBD Thm 6.11 (SSBD's proof differs; make sure your constants match whichever proof you present).</li>
+    </ul>
+  </div>
+
+
   <p>ERM works when the empirical error $L_S(h)$ is close to the true error $L_{\mathcal{D}}(h)$ for <em>every</em>
     $h \in \mathcal{H}$ at the same time, not just for one fixed $h$.</p>
 

@@ -140,3 +140,10 @@ section.chapter {
 @media (max-width: 640px) {
   section.chapter { scroll-margin-top: 3rem; }
 }
+
+/* Main to-do checklist at the top of each chapter */
+.todo-main { padding: 0.6rem 1rem; margin: 1rem 0 1.5rem; }
+.todo-main .todo-title { font-weight: 700; font-size: 1rem; margin: 0 0 0.3rem; }
+.todo-main p { margin: 0.6rem 0 0.2rem; }
+.todo-main ul { margin: 0; padding-left: 1.2rem; }
+.todo-main li { margin: 0.15rem 0; }

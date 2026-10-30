@@ -13,6 +13,25 @@
 <main>
   <h1>5. The Fundamental Theorem of PAC Learning</h1>
 
+  <div class="todo todo-main">
+    <p class="todo-title">To do: Chapter 5</p>
+    <p><strong>Write</strong></p>
+    <ul>
+      <li>Roadmap figure for the chain of implications 1⇒2⇒3⇒4⇒6⇒1 and 2⇒5⇒4.</li>
+      <li>Sufficiency section: assemble Ch. 3 and Ch. 4 into a sample complexity bound.</li>
+      <li>No Free Lunch: intuition (the adversary labels the unseen half) and full proof.</li>
+      <li>Corollary: infinite VC dimension ⇒ not PAC learnable.</li>
+      <li>Solutions to Exercises 5.1 and 5.2.</li>
+    </ul>
+    <p><strong>Proof-check</strong></p>
+    <ul>
+      <li>Equivalence list against SSBD Thm 6.7.</li>
+      <li>Quantitative realizable bounds against SSBD Thm 6.8; consider also stating the agnostic bounds $\Theta\big(\frac{d+\log(1/\delta)}{\varepsilon^2}\big)$.</li>
+      <li>No Free Lunch constants ($1/8$, $1/7$) and the condition $m &lt; |\mathcal{X}|/2$ (SSBD Thm 5.1).</li>
+    </ul>
+  </div>
+
+
   <div class="theorem" data-name="(Fundamental Theorem, qualitative)">
     For a class $\mathcal{H}$ of functions $\mathcal{X} \to \{0,1\}$ with 0-1 loss, the following are equivalent:
     <ol>
