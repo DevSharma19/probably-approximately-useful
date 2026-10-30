@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3. The Sauer–Shelah Lemma · Probably Approximately Useful</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="3-sauer-shelah.html" data-root="../">
+<main>
+  <h1>3. The Sauer–Shelah Lemma</h1>
+
+  <div class="definition" data-name="(Growth function)">
+    $\tau_{\mathcal{H}}(m) = \max_{C \subseteq \mathcal{X},\, |C| = m} |\mathcal{H}_C|$.
+  </div>
+  <p>Always $\tau_{\mathcal{H}}(m) \le 2^m$, with equality exactly when some $m$-point set is shattered, so equality holds iff $m \le \mathrm{VCdim}(\mathcal{H})$.
+    The surprise: once $m$ passes the VC dimension, the growth function is only <em>polynomial</em>.</p>
+
+  <div class="lemma" data-name="(Sauer–Shelah–Perles)">
+    If $\mathrm{VCdim}(\mathcal{H}) \le d$, then for all $m$,
+    $$\tau_{\mathcal{H}}(m) \le \sum_{i=0}^{d} \binom{m}{i}, \qquad\text{and for } m \ge d,\quad \sum_{i=0}^{d}\binom{m}{i} \le \left(\frac{em}{d}\right)^d.$$
+  </div>
+
+  <h2>See it: exponential vs. polynomial</h2>
+  <p>The y-axis is logarithmic, so $2^m$ is a straight line. The bound matches $2^m$ up to $m = d$, then bends away.</p>
+  <div class="widget" data-widget="growth"></div>
+
+  <h2>Proof</h2>
+  <div class="proof">
+    <p class="todo">TODO: prove the stronger statement $|\mathcal{H}_C| \le |\{B \subseteq C : \mathcal{H} \text{ shatters } B\}|$ by induction on $|C|$, splitting on the last point $c_m$. Then note that every shattered $B$ has $|B| \le d$.</p>
+  </div>
+  <p class="todo">TODO: proof of $\sum_{i\le d}\binom{m}{i} \le (em/d)^d$, multiplying by $(d/m)^d$ and using the binomial theorem.</p>
+
+  <h2>Why this matters</h2>
+  <p class="todo">TODO: preview that in the finite-class union bound, $\ln|\mathcal{H}|$ can be replaced by roughly $\ln \tau_{\mathcal{H}}(2m) = O(d \log m)$. Chapter 4 makes this precise.</p>
+
+  <h2>Exercises</h2>
+  <div class="exercise">
+    <p><strong>3.1</strong> Compute $\tau_{\mathcal{H}}(m)$ exactly for thresholds and for intervals on $\mathbb{R}$. Compare with the Sauer–Shelah bound.</p>
+    <details><summary>Solution</summary><p class="todo">TODO: thresholds give $m+1$; intervals give $\binom{m+1}{2} + 1$. Both match the bound exactly.</p></details>
+  </div>
+  <div class="exercise">
+    <p><strong>3.2</strong> Show the lemma is tight: give a class with VC dimension $d$ where $\tau_{\mathcal{H}}(m) = \sum_{i=0}^d \binom{m}{i}$ for all $m$.</p>
+    <details><summary>Solution</summary><p class="todo">TODO: indicator functions of subsets of $\mathcal{X}$ with at most $d$ elements, over an infinite $\mathcal{X}$.</p></details>
+  </div>
+</main>
+<script src="../js/nav.js"></script>
+<script src="../js/growth.js"></script>
+</body>
+</html>

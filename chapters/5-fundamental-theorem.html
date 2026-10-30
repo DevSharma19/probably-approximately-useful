@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>5. The Fundamental Theorem · Probably Approximately Useful</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="5-fundamental-theorem.html" data-root="../">
+<main>
+  <h1>5. The Fundamental Theorem of PAC Learning</h1>
+
+  <div class="theorem" data-name="(Fundamental Theorem, qualitative)">
+    For a class $\mathcal{H}$ of functions $\mathcal{X} \to \{0,1\}$ with 0-1 loss, the following are equivalent:
+    <ol>
+      <li>$\mathcal{H}$ has the uniform convergence property.</li>
+      <li>Any ERM rule is a successful agnostic PAC learner for $\mathcal{H}$.</li>
+      <li>$\mathcal{H}$ is agnostic PAC learnable.</li>
+      <li>$\mathcal{H}$ is PAC learnable.</li>
+      <li>Any ERM rule is a successful PAC learner for $\mathcal{H}$.</li>
+      <li>$\mathrm{VCdim}(\mathcal{H}) &lt; \infty$.</li>
+    </ol>
+  </div>
+
+  <div class="theorem" data-name="(Fundamental Theorem, quantitative)">
+    If $\mathrm{VCdim}(\mathcal{H}) = d &lt; \infty$, there are absolute constants $C_1, C_2$ such that, in the realizable case,
+    $$C_1 \frac{d + \log(1/\delta)}{\varepsilon} \;\le\; m_{\mathcal{H}}(\varepsilon,\delta) \;\le\; C_2 \frac{d \log(1/\varepsilon) + \log(1/\delta)}{\varepsilon}.$$
+  </div>
+  <p class="todo">TODO: a roadmap figure for the chain of implications: 1⇒2 (Ch. 4 lemma), 2⇒3, 3⇒4, 2⇒5, 5⇒4 (trivial), 4⇒6 (No Free Lunch), 6⇒1 (Ch. 3 and Ch. 4).</p>
+
+  <h2>Sufficiency: finite VC ⇒ learnable</h2>
+  <p class="todo">TODO: assemble Sauer–Shelah and uniform convergence from Chapters 3–4.</p>
+
+  <h2>Necessity: infinite VC ⇒ not learnable</h2>
+  <div class="theorem" data-name="(No Free Lunch)">
+    Let $A$ be any learner for binary classification over $\mathcal{X}$, and let $m &lt; |\mathcal{X}|/2$. Then there exist a distribution $\mathcal{D}$
+    and a target $f$ with $L_{\mathcal{D}}(f) = 0$ such that
+    $\Pr_{S \sim \mathcal{D}^m}\big[L_{\mathcal{D}}(A(S)) \ge 1/8\big] \ge 1/7$.
+  </div>
+  <p class="todo">TODO: apply this to a shattered set $C$ of size $2m$: every labeling of $C$ is in $\mathcal{H}$, so the realizability assumption doesn't help. Give intuition: the learner has seen at most half of $C$, and on the unseen half an adversary can choose the labels.</p>
+  <div class="proof"><p class="todo">TODO: averaging argument over all $2^{2m}$ labelings of $C$ with $\mathcal{D}$ uniform on $C$.</p></div>
+
+  <h2>Exercises</h2>
+  <div class="exercise">
+    <p><strong>5.1</strong> Use the Fundamental Theorem to show that convex polygons in $\mathbb{R}^2$ are not PAC learnable,
+      while axis-aligned rectangles are. Give a sample complexity bound for the latter.</p>
+    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  </div>
+  <div class="exercise">
+    <p><strong>5.2</strong> In the No Free Lunch theorem, where does the proof use $m &lt; |C|/2$? What goes wrong if $m \ge |C|$?</p>
+    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  </div>
+</main>
+<script src="../js/nav.js"></script>
+</body>
+</html>

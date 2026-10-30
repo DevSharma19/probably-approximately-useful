@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>6. Beyond · Probably Approximately Useful</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="6-beyond.html" data-root="../">
+<main>
+  <h1>6. Beyond</h1>
+  <p>The Fundamental Theorem is about <em>samples</em>, not <em>time</em>. A complexity theorist should ask:
+    even when few samples suffice, can we find a good hypothesis efficiently?</p>
+
+  <h2>Efficient learnability</h2>
+  <p class="todo">TODO: efficient PAC learning (polynomial time in $1/\varepsilon$, $1/\delta$, and the input size). ERM can be NP-hard: properly learning 3-term DNF is NP-hard unless RP = NP, yet it is efficiently learnable using 3-CNF as the hypothesis class.</p>
+
+  <h2>Further directions</h2>
+  <p class="todo">TODO (optional): agnostic learning, Occam's razor and sample compression, cryptographic hardness of learning, and why modern neural networks generalize despite a huge VC dimension.</p>
+
+  <h2>References</h2>
+  <ul>
+    <li>S. Shalev-Shwartz and S. Ben-David, <em>Understanding Machine Learning: From Theory to Algorithms</em>, Cambridge University Press, 2014. Chapters 2–6.</li>
+    <li>M. Kearns and U. Vazirani, <em>An Introduction to Computational Learning Theory</em>, MIT Press, 1994.</li>
+    <li>L. Valiant, "A Theory of the Learnable," <em>Communications of the ACM</em>, 1984.</li>
+    <li>A. Blumer, A. Ehrenfeucht, D. Haussler, and M. Warmuth, "Learnability and the Vapnik–Chervonenkis Dimension," <em>Journal of the ACM</em>, 1989.</li>
+  </ul>
+</main>
+<script src="../js/nav.js"></script>
+</body>
+</html>

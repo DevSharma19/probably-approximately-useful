@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>4. Uniform Convergence · Probably Approximately Useful</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="4-uniform-convergence.html" data-root="../">
+<main>
+  <h1>4. Uniform Convergence</h1>
+
+  <p>ERM works when the empirical error $L_S(h)$ is close to the true error $L_{\mathcal{D}}(h)$ for <em>every</em>
+    $h \in \mathcal{H}$ at the same time, not just for one fixed $h$.</p>
+
+  <div class="definition" data-name="(ε-representative sample)">
+    $S$ is $\varepsilon$-representative if $|L_S(h) - L_{\mathcal{D}}(h)| \le \varepsilon$ for all $h \in \mathcal{H}$.
+  </div>
+  <div class="definition" data-name="(Uniform convergence property)">
+    $\mathcal{H}$ has the uniform convergence property if there is $m^{UC}_{\mathcal{H}}(\varepsilon,\delta)$ such that for every $\mathcal{D}$,
+    a sample of size $m \ge m^{UC}_{\mathcal{H}}(\varepsilon,\delta)$ is $\varepsilon$-representative with probability at least $1-\delta$.
+  </div>
+
+  <div class="lemma" data-name="(Representative ⇒ ERM succeeds)">
+    If $S$ is $\tfrac{\varepsilon}{2}$-representative, then any ERM output $h_S$ satisfies $L_{\mathcal{D}}(h_S) \le \min_{h\in\mathcal{H}} L_{\mathcal{D}}(h) + \varepsilon$.
+  </div>
+  <p class="todo">TODO: two-line proof.</p>
+
+  <h2>Finite VC dimension ⇒ uniform convergence</h2>
+  <p class="todo">TODO: proof outline.
+    (1) Hoeffding plus a union bound handles finite $\mathcal{H}$.
+    (2) Symmetrization ("ghost sample"): compare $L_S$ with $L_{S'}$ on a second independent sample, so only behavior on $2m$ points matters.
+    (3) On $2m$ points, $\mathcal{H}$ acts like at most $\tau_{\mathcal{H}}(2m) \le (2em/d)^d$ distinct hypotheses (Sauer–Shelah).
+    (4) Union bound over these and solve for $m$.</p>
+  <p class="todo">TODO: decide whether to present the full proof or a careful sketch. Check constants against Shalev-Shwartz &amp; Ben-David, Ch. 6.</p>
+
+  <h2>Exercises</h2>
+  <div class="exercise">
+    <p><strong>4.1</strong> Prove the "Representative ⇒ ERM succeeds" lemma.</p>
+    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  </div>
+  <div class="exercise">
+    <p><strong>4.2</strong> Using Hoeffding's inequality and a union bound, show that every finite $\mathcal{H}$ has the uniform convergence property with
+      $m^{UC}_{\mathcal{H}}(\varepsilon,\delta) \le \left\lceil \frac{\ln(2|\mathcal{H}|/\delta)}{2\varepsilon^2} \right\rceil$.</p>
+    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  </div>
+</main>
+<script src="../js/nav.js"></script>
+</body>
+</html>

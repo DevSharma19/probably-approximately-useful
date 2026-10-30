@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Probably Approximately Useful</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="index" data-root="">
+<main>
+  <h1>Probably Approximately Useful</h1>
+  <p><em>VC dimension and the Fundamental Theorem of PAC Learning</em></p>
+
+  <p>When can a machine learn a concept from examples? This site answers one precise version of that question:
+    a class of classifiers is learnable from a finite number of samples <strong>if and only if</strong>
+    its VC dimension is finite.</p>
+
+  <p class="todo">TODO: motivating hook, such as the "learning to spot spam" story or why counting $|\mathcal{H}|$ breaks down for infinite classes.</p>
+
+  <h2>Who this is for</h2>
+  <p>Students who have taken 15-455 (Undergraduate Complexity Theory). We assume comfort with proofs,
+    asymptotic notation, and basic discrete probability (union bound, expectation, concentration).
+    No machine learning background is needed.</p>
+
+  <h2>Chapters</h2>
+  <ol>
+    <li><a href="chapters/1-pac.html">Learning from Samples</a>: the PAC model and finite hypothesis classes</li>
+    <li><a href="chapters/2-vc-dimension.html">Shattering &amp; VC Dimension</a>: measuring the size of infinite classes (interactive)</li>
+    <li><a href="chapters/3-sauer-shelah.html">The Sauer–Shelah Lemma</a>: from exponential to polynomial (interactive)</li>
+    <li><a href="chapters/4-uniform-convergence.html">Uniform Convergence</a>: why empirical error tracks true error</li>
+    <li><a href="chapters/5-fundamental-theorem.html">The Fundamental Theorem</a>: finite VC dimension ⇔ PAC learnable</li>
+    <li><a href="chapters/6-beyond.html">Beyond</a>: computational efficiency and further directions</li>
+  </ol>
+  <p>Each chapter ends with exercises; solutions are hidden until you click.</p>
+</main>
+<script src="js/nav.js"></script>
+</body>
+</html>

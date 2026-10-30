@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2. Shattering &amp; VC Dimension · Probably Approximately Useful</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="2-vc-dimension.html" data-root="../">
+<main>
+  <h1>2. Shattering &amp; VC Dimension</h1>
+
+  <p>Instead of counting hypotheses, count how many <em>different behaviors</em> $\mathcal{H}$ can show on a finite set of points.</p>
+
+  <div class="definition" data-name="(Restriction)">
+    For $C = \{c_1,\dots,c_m\} \subseteq \mathcal{X}$, the restriction of $\mathcal{H}$ to $C$ is
+    $\mathcal{H}_C = \{ (h(c_1),\dots,h(c_m)) : h \in \mathcal{H} \} \subseteq \{0,1\}^m$.
+  </div>
+  <div class="definition" data-name="(Shattering)">
+    $\mathcal{H}$ <em>shatters</em> $C$ if $|\mathcal{H}_C| = 2^{|C|}$, meaning every labeling of $C$ is achieved by some $h \in \mathcal{H}$.
+  </div>
+  <div class="definition" data-name="(VC dimension)">
+    $\mathrm{VCdim}(\mathcal{H})$ is the size of the largest set shattered by $\mathcal{H}$, or $\infty$ if $\mathcal{H}$ shatters arbitrarily large sets.
+  </div>
+  <p>To show $\mathrm{VCdim}(\mathcal{H}) = d$, you must show both:
+    (1) <em>some</em> set of size $d$ is shattered, and (2) <em>no</em> set of size $d+1$ is shattered.</p>
+
+  <h2>Try it: the shattering game</h2>
+  <p>Place points and pick a class. The widget checks all $2^n$ labelings. Can you find the largest set each class shatters?
+    Can you convince yourself that no larger set works?</p>
+  <div class="widget" data-widget="shattering"></div>
+
+  <h2>Examples</h2>
+  <div class="example" data-name="(Thresholds)"><p class="todo">TODO: VCdim = 1. Any point is shattered; for $x_1 &lt; x_2$ the labeling $(1,0)$ is impossible.</p></div>
+  <div class="example" data-name="(Intervals)"><p class="todo">TODO: VCdim = 2; the labeling $(1,0,1)$ is impossible.</p></div>
+  <div class="example" data-name="(Axis-aligned rectangles)"><p class="todo">TODO: VCdim = 4 using a "diamond"; for 5 points, label the extreme points positive and the rest negative.</p></div>
+  <div class="example" data-name="(Halfplanes)"><p class="todo">TODO: VCdim = 3; Radon's theorem in general ($d+1$ in $\mathbb{R}^d$).</p></div>
+  <div class="example" data-name="(Convex polygons)"><p class="todo">TODO: VCdim = ∞, using points on a circle. Try it in the widget!</p></div>
+
+  <p class="todo">TODO: warn that VC dimension ≠ number of parameters (for example, $\{x \mapsto \mathbb{1}[\sin(\theta x) &gt; 0]\}$ has one parameter but infinite VC dimension).</p>
+
+  <h2>Exercises</h2>
+  <div class="exercise">
+    <p><strong>2.1</strong> Prove that the VC dimension of intervals on $\mathbb{R}$ is exactly 2.</p>
+    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  </div>
+  <div class="exercise">
+    <p><strong>2.2</strong> Prove that the VC dimension of axis-aligned rectangles in $\mathbb{R}^2$ is exactly 4.</p>
+    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  </div>
+  <div class="exercise">
+    <p><strong>2.3</strong> Show that if $\mathcal{H}$ is finite then $\mathrm{VCdim}(\mathcal{H}) \le \log_2|\mathcal{H}|$.</p>
+    <details><summary>Solution</summary><p class="todo">TODO: shattering $d$ points requires $2^d$ distinct hypotheses.</p></details>
+  </div>
+</main>
+<script src="../js/nav.js"></script>
+<script src="../js/shattering.js"></script>
+</body>
+</html>

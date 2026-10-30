@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>1. Learning from Samples · Probably Approximately Useful</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="1-pac.html" data-root="../">
+<main>
+  <h1>1. Learning from Samples</h1>
+
+  <h2>The setup</h2>
+  <p>A <strong>domain</strong> $\mathcal{X}$, labels $\{0,1\}$, an unknown distribution $\mathcal{D}$ over $\mathcal{X}$,
+    and an unknown <strong>target</strong> $f : \mathcal{X} \to \{0,1\}$. The learner sees a sample
+    $S = ((x_1, f(x_1)), \dots, (x_m, f(x_m)))$ with $x_i \sim \mathcal{D}$ i.i.d., and outputs a hypothesis $h$.</p>
+  <p class="todo">TODO: intuition and a running example (for example, thresholds on $\mathbb{R}$).</p>
+
+  <div class="definition" data-name="(True and empirical error)">
+    $L_{\mathcal{D},f}(h) = \Pr_{x \sim \mathcal{D}}[h(x) \neq f(x)]$ and
+    $L_S(h) = \frac{1}{m}\left|\{ i : h(x_i) \neq f(x_i)\}\right|$.
+  </div>
+
+  <div class="definition" data-name="(PAC learnability, realizable case)">
+    A hypothesis class $\mathcal{H}$ is <em>PAC learnable</em> if there exist a function
+    $m_{\mathcal{H}} : (0,1)^2 \to \mathbb{N}$ and a learning algorithm $A$ such that for every
+    $\varepsilon, \delta \in (0,1)$, every distribution $\mathcal{D}$ over $\mathcal{X}$, and every target $f \in \mathcal{H}$:
+    given $m \ge m_{\mathcal{H}}(\varepsilon,\delta)$ i.i.d. samples labeled by $f$, $A$ outputs $h$ with
+    $$\Pr_{S \sim \mathcal{D}^m}\big[L_{\mathcal{D},f}(h) \le \varepsilon\big] \ge 1 - \delta.$$
+  </div>
+  <p class="todo">TODO: unpack "probably" ($\delta$) and "approximately" ($\varepsilon$). Stress that the bound holds for <em>every</em> distribution (distribution-free).</p>
+
+  <h2>Empirical Risk Minimization</h2>
+  <p>$\mathrm{ERM}_{\mathcal{H}}$: output any $h \in \mathcal{H}$ minimizing $L_S(h)$.</p>
+
+  <div class="theorem" data-name="(Finite classes)">
+    If $\mathcal{H}$ is finite, ERM is a PAC learner with sample complexity
+    $$m_{\mathcal{H}}(\varepsilon,\delta) \le \left\lceil \frac{\ln(|\mathcal{H}|/\delta)}{\varepsilon} \right\rceil.$$
+  </div>
+  <div class="proof">
+    <p class="todo">TODO: each "bad" $h$ (with $L_{\mathcal{D},f}(h) &gt; \varepsilon$) is consistent with $S$ with probability at most $(1-\varepsilon)^m \le e^{-\varepsilon m}$. Then apply a union bound over $\mathcal{H}$.</p>
+  </div>
+
+  <h2>The problem with infinite classes</h2>
+  <p class="todo">TODO: thresholds on $\mathbb{R}$ have $|\mathcal{H}| = \infty$ but are clearly learnable, so $\log|\mathcal{H}|$ is the wrong measure. This motivates Chapter 2.</p>
+
+  <h2>Exercises</h2>
+  <div class="exercise">
+    <p><strong>1.1</strong> Show that ERM learns thresholds $h_t(x) = \mathbb{1}[x \ge t]$ on $\mathbb{R}$ with
+      $m = O\!\left(\frac{1}{\varepsilon}\log\frac{1}{\delta}\right)$ samples, despite $\mathcal{H}$ being infinite.</p>
+    <details><summary>Solution</summary>
+      <p class="todo">TODO: consider the interval just to the right of $t^*$ with probability mass $\varepsilon$, and the one just to the left. A consistent $h_t$ with error above $\varepsilon$ is possible only if no sample lands in one of these two intervals, which happens with probability at most $2(1-\varepsilon)^m$.</p>
+    </details>
+  </div>
+  <div class="exercise">
+    <p><strong>1.2</strong> Prove the finite-class bound above in full.</p>
+    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  </div>
+</main>
+<script src="../js/nav.js"></script>
+</body>
+</html>

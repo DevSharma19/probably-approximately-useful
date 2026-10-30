@@ -1,0 +1,122 @@
+:root {
+  --fg: #1f2328;
+  --muted: #59636e;
+  --bg: #fdfdfb;
+  --accent: #c41230; /* CMU red */
+  --border: #d8dee4;
+  --pos: #1a7f37;
+  --neg: #cf222e;
+  --box: #f3f5f7;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+header.site {
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  align-items: baseline;
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+header.site .title { font-weight: 700; color: var(--accent); text-decoration: none; margin-right: 1rem; }
+header.site a { color: var(--muted); text-decoration: none; }
+header.site a.current { color: var(--fg); font-weight: 600; }
+
+main { max-width: 46rem; margin: 0 auto; padding: 1.5rem; }
+
+h1, h2, h3 { font-family: system-ui, sans-serif; line-height: 1.25; }
+h1 { font-size: 2rem; }
+
+a { color: var(--accent); }
+
+.todo {
+  background: #fff8c5;
+  border-left: 4px solid #d4a72c;
+  padding: 0.4rem 0.8rem;
+  font-family: system-ui, sans-serif;
+  font-size: 0.85rem;
+}
+
+/* Definition / theorem boxes */
+.definition, .theorem, .lemma, .proof, .example {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--muted);
+  background: var(--box);
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+}
+.definition { border-left-color: #0969da; }
+.theorem, .lemma { border-left-color: var(--accent); }
+.example { border-left-color: var(--pos); }
+.definition::before, .theorem::before, .lemma::before, .proof::before, .example::before {
+  font-family: system-ui, sans-serif;
+  font-weight: 700;
+  display: block;
+}
+.definition::before { content: "Definition " attr(data-name); }
+.theorem::before    { content: "Theorem " attr(data-name); }
+.lemma::before      { content: "Lemma " attr(data-name); }
+.example::before    { content: "Example " attr(data-name); }
+.proof::before      { content: "Proof"; font-style: italic; font-weight: 400; }
+
+/* Exercises */
+.exercise { margin: 1rem 0; }
+.exercise details { margin-top: 0.3rem; }
+.exercise summary { cursor: pointer; color: var(--muted); font-family: system-ui, sans-serif; font-size: 0.9rem; }
+
+/* Prev / next */
+nav.pager {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+  padding-top: 1rem;
+  font-family: system-ui, sans-serif;
+}
+
+/* Interactives */
+.widget {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+  background: #fff;
+}
+.widget canvas { border: 1px solid var(--border); background: #fff; max-width: 100%; }
+.widget .controls { display: flex; flex-wrap: wrap; gap: 0.6rem 1.2rem; align-items: center; margin: 0.5rem 0; }
+.widget .status { font-weight: 600; margin: 0.5rem 0; }
+.labelings { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.5rem; }
+.labelings canvas { border-width: 2px; }
+.labelings canvas.ok  { border-color: var(--pos); }
+.labelings canvas.bad { border-color: var(--neg); opacity: 0.55; }
+
+/* Phones */
+.widget canvas { width: 100%; height: auto; touch-action: manipulation; }
+.labelings canvas { width: 30%; max-width: 120px; height: auto; }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.2rem 0; }
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  main { padding: 1rem; }
+  h1 { font-size: 1.6rem; }
+  header.site { flex-wrap: nowrap; overflow-x: auto; white-space: nowrap; padding: 0.6rem 1rem; }
+  .definition, .theorem, .lemma, .proof, .example { padding: 0.5rem 0.7rem; }
+  .widget { padding: 0.6rem; }
+  .widget select { max-width: 100%; }
+  nav.pager { flex-direction: column; gap: 0.6rem; }
+  nav.pager a:last-child { text-align: right; }
+}
