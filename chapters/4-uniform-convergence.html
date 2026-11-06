@@ -17,6 +17,7 @@
     <p class="todo-title">To do: Chapter 4</p>
     <p><strong>Write</strong></p>
     <ul>
+      <li>Intuition for the agnostic setting: noisy labels, or a class too simple to be perfect (example: thresholds when the true rule is an interval).</li>
       <li>Motivation: why concentration for one fixed $h$ is not enough (ERM picks $h$ <em>after</em> seeing $S$).</li>
       <li>Proof of the "Representative ⇒ ERM succeeds" lemma.</li>
       <li>Decide: full proof or careful sketch of finite VC ⇒ uniform convergence, then write it.</li>
@@ -24,13 +25,26 @@
     </ul>
     <p><strong>Proof-check</strong></p>
     <ul>
-      <li>This chapter uses $L_{\mathcal{D}}$ and $\min_h L_{\mathcal{D}}(h)$, i.e. the agnostic setting. Make sure it is defined first.</li>
+      <li>Agnostic PAC definition against SSBD Def. 3.3.</li>
       <li>Exercise 4.2 constant: $\ln(2|\mathcal{H}|/\delta)/(2\varepsilon^2)$ (SSBD Cor. 4.6).</li>
       <li>Symmetrization outline vs. SSBD Thm 6.11 (SSBD's proof differs; make sure your constants match whichever proof you present).</li>
     </ul>
   </div>
 
 
+  <h2>Dropping realizability</h2>
+  <p>Now remove the realizability assumption. The labels may be noisy, or no hypothesis in $\mathcal{H}$ may be perfect.
+    We can no longer ask for error $\le \varepsilon$. Instead, we ask to be nearly as good as the best hypothesis in the class.</p>
+
+  <div class="definition" data-name="(Agnostic PAC learnability)">
+    $\mathcal{H}$ is <em>agnostic PAC learnable</em> if there exist $m_{\mathcal{H}} : (0,1)^2 \to \mathbb{N}$ and an algorithm $A$ such that for every
+    $\varepsilon, \delta \in (0,1)$ and <em>every</em> distribution $\mathcal{D}$ over $\mathcal{X} \times \{0,1\}$: given $m \ge m_{\mathcal{H}}(\varepsilon,\delta)$
+    i.i.d. examples from $\mathcal{D}$, $A$ outputs $h$ with
+    $$\Pr_{S \sim \mathcal{D}^m}\Big[L_{\mathcal{D}}(h) \le \min_{h' \in \mathcal{H}} L_{\mathcal{D}}(h') + \varepsilon\Big] \ge 1 - \delta.$$
+  </div>
+  <p>When realizability holds, $\min_{h'} L_{\mathcal{D}}(h') = 0$ and this is exactly PAC learnability from Chapter 1.</p>
+
+  <h2>Uniform convergence</h2>
   <p>ERM works when the empirical error $L_S(h)$ is close to the true error $L_{\mathcal{D}}(h)$ for <em>every</em>
     $h \in \mathcal{H}$ at the same time, not just for one fixed $h$.</p>
 

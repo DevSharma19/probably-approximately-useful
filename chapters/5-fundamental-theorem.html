@@ -56,7 +56,7 @@
   <h2>Necessity: infinite VC ⇒ not learnable</h2>
   <div class="theorem" data-name="(No Free Lunch)">
     Let $A$ be any learner for binary classification over $\mathcal{X}$, and let $m &lt; |\mathcal{X}|/2$. Then there exist a distribution $\mathcal{D}$
-    and a target $f$ with $L_{\mathcal{D}}(f) = 0$ such that
+    and a function $f : \mathcal{X} \to \{0,1\}$ with $L_{\mathcal{D}}(f) = 0$ such that
     $\Pr_{S \sim \mathcal{D}^m}\big[L_{\mathcal{D}}(A(S)) \ge 1/8\big] \ge 1/7$.
   </div>
   <p class="todo">TODO: apply this to a shattered set $C$ of size $2m$: every labeling of $C$ is in $\mathcal{H}$, so the realizability assumption doesn't help. Give intuition: the learner has seen at most half of $C$, and on the unseen half an adversary can choose the labels.</p>

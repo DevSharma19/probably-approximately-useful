@@ -21,6 +21,7 @@ Where it fits naturally, tie the material back to complexity theory (for example
 ## Writing guidelines
 
 - Mathematical correctness matters most. State theorems precisely, including quantifiers over distributions, ε, and δ. Keep notation consistent across pages, and check bounds (for example, the dependence on d, 1/ε, and log(1/δ)) against standard references such as Shalev-Shwartz & Ben-David, *Understanding Machine Learning*, or Kearns & Vazirani.
+- Notation: $\mathcal{D}$ is always a distribution over labeled pairs $\mathcal{X} \times \{0,1\}$, and error is $L_{\mathcal{D}}(h) = \Pr_{(x,y)\sim\mathcal{D}}[h(x) \ne y]$. The realizable setting (chapters 1–3) is the *assumption* that some $h^\star \in \mathcal{H}$ has $L_{\mathcal{D}}(h^\star) = 0$. Chapter 4 drops it to get the agnostic setting. Don't use target-function notation like $L_{\mathcal{D},f}$.
 - Give each formal definition or theorem some intuition and at least one concrete example.
 
 ## Development

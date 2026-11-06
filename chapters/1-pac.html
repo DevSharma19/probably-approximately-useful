@@ -21,12 +21,12 @@
       <li>Unpack "probably" ($\delta$) and "approximately" ($\varepsilon$); stress that the guarantee is distribution-free.</li>
       <li>Full proof of the finite-class theorem (bad-hypothesis bound + union bound).</li>
       <li>"The problem with infinite classes" section, leading into Ch. 2.</li>
-      <li>Define the <em>agnostic</em> setting ($\mathcal{D}$ over $\mathcal{X}\times\{0,1\}$, no target $f$). Ch. 4–5 rely on it but it is never introduced (or introduce it in Ch. 4).</li>
+      <li>Intuition for $\mathcal{D}$ as a distribution over <em>labeled</em> pairs (draw $x$, then its label $y$), and why realizability means "some $h^\star \in \mathcal{H}$ is perfect".</li>
       <li>Solutions to Exercises 1.1 and 1.2.</li>
     </ul>
     <p><strong>Proof-check</strong></p>
     <ul>
-      <li>PAC definition quantifier order: $m_{\mathcal{H}}$ depends only on $\varepsilon,\delta$, not on $\mathcal{D}$ or $f$.</li>
+      <li>PAC definition quantifier order: $m_{\mathcal{H}}$ depends only on $\varepsilon,\delta$, not on $\mathcal{D}$.</li>
       <li>Finite-class bound $\lceil \ln(|\mathcal{H}|/\delta)/\varepsilon \rceil$ (SSBD Cor. 2.3).</li>
       <li>Exercise 1.1 hint: the $2(1-\varepsilon)^m$ bound and the claimed $O(\frac{1}{\varepsilon}\log\frac{1}{\delta})$.</li>
     </ul>
@@ -34,22 +34,29 @@
 
 
   <h2>The setup</h2>
-  <p>A <strong>domain</strong> $\mathcal{X}$, labels $\{0,1\}$, an unknown distribution $\mathcal{D}$ over $\mathcal{X}$,
-    and an unknown <strong>target</strong> $f : \mathcal{X} \to \{0,1\}$. The learner sees a sample
-    $S = ((x_1, f(x_1)), \dots, (x_m, f(x_m)))$ with $x_i \sim \mathcal{D}$ i.i.d., and outputs a hypothesis $h$.</p>
+  <p>A <strong>domain</strong> $\mathcal{X}$, labels $\{0,1\}$, and an unknown distribution $\mathcal{D}$ over
+    <em>labeled examples</em> $\mathcal{X} \times \{0,1\}$. The learner sees a sample
+    $S = ((x_1, y_1), \dots, (x_m, y_m))$ drawn i.i.d. from $\mathcal{D}$, and outputs a hypothesis $h : \mathcal{X} \to \{0,1\}$.
+    It chooses $h$ from a fixed <strong>hypothesis class</strong> $\mathcal{H}$.</p>
   <p class="todo">TODO: intuition and a running example (for example, thresholds on $\mathbb{R}$).</p>
 
   <div class="definition" data-name="(True and empirical error)">
-    $L_{\mathcal{D},f}(h) = \Pr_{x \sim \mathcal{D}}[h(x) \neq f(x)]$ and
-    $L_S(h) = \frac{1}{m}\left|\{ i : h(x_i) \neq f(x_i)\}\right|$.
+    $L_{\mathcal{D}}(h) = \Pr_{(x,y) \sim \mathcal{D}}[h(x) \neq y]$ and
+    $L_S(h) = \frac{1}{m}\left|\{ i : h(x_i) \neq y_i\}\right|$.
   </div>
+
+  <div class="definition" data-name="(Realizability assumption)">
+    There exists $h^\star \in \mathcal{H}$ with $L_{\mathcal{D}}(h^\star) = 0$.
+  </div>
+  <p>In words: some hypothesis in the class labels everything correctly, so the labels in $S$ really come from a rule in $\mathcal{H}$.
+    Chapters 1–3 assume this; Chapter 4 drops it.</p>
 
   <div class="definition" data-name="(PAC learnability, realizable case)">
     A hypothesis class $\mathcal{H}$ is <em>PAC learnable</em> if there exist a function
     $m_{\mathcal{H}} : (0,1)^2 \to \mathbb{N}$ and a learning algorithm $A$ such that for every
-    $\varepsilon, \delta \in (0,1)$, every distribution $\mathcal{D}$ over $\mathcal{X}$, and every target $f \in \mathcal{H}$:
-    given $m \ge m_{\mathcal{H}}(\varepsilon,\delta)$ i.i.d. samples labeled by $f$, $A$ outputs $h$ with
-    $$\Pr_{S \sim \mathcal{D}^m}\big[L_{\mathcal{D},f}(h) \le \varepsilon\big] \ge 1 - \delta.$$
+    $\varepsilon, \delta \in (0,1)$ and every distribution $\mathcal{D}$ over $\mathcal{X} \times \{0,1\}$ for which the realizability assumption holds:
+    given $m \ge m_{\mathcal{H}}(\varepsilon,\delta)$ i.i.d. examples from $\mathcal{D}$, $A$ outputs $h$ with
+    $$\Pr_{S \sim \mathcal{D}^m}\big[L_{\mathcal{D}}(h) \le \varepsilon\big] \ge 1 - \delta.$$
   </div>
   <p class="todo">TODO: unpack "probably" ($\delta$) and "approximately" ($\varepsilon$). Stress that the bound holds for <em>every</em> distribution (distribution-free).</p>
 
@@ -61,7 +68,7 @@
     $$m_{\mathcal{H}}(\varepsilon,\delta) \le \left\lceil \frac{\ln(|\mathcal{H}|/\delta)}{\varepsilon} \right\rceil.$$
   </div>
   <div class="proof">
-    <p class="todo">TODO: each "bad" $h$ (with $L_{\mathcal{D},f}(h) &gt; \varepsilon$) is consistent with $S$ with probability at most $(1-\varepsilon)^m \le e^{-\varepsilon m}$. Then apply a union bound over $\mathcal{H}$.</p>
+    <p class="todo">TODO: each "bad" $h$ (with $L_{\mathcal{D}}(h) &gt; \varepsilon$) is consistent with $S$ with probability at most $(1-\varepsilon)^m \le e^{-\varepsilon m}$. Then apply a union bound over $\mathcal{H}$.</p>
   </div>
 
   <h2>The problem with infinite classes</h2>
@@ -69,7 +76,7 @@
 
   <h2>Exercises</h2>
   <div class="exercise">
-    <p><strong>1.1</strong> Show that ERM learns thresholds $h_t(x) = \mathbb{1}[x \ge t]$ on $\mathbb{R}$ with
+    <p><strong>1.1</strong> Let $\mathcal{D}$ be realizable by the threshold $h_{t^\star}$. Show that ERM learns thresholds $h_t(x) = \mathbb{1}[x \ge t]$ on $\mathbb{R}$ with
       $m = O\!\left(\frac{1}{\varepsilon}\log\frac{1}{\delta}\right)$ samples, despite $\mathcal{H}$ being infinite.</p>
     <details><summary>Solution</summary>
       <p class="todo">TODO: consider the interval just to the right of $t^*$ with probability mass $\varepsilon$, and the one just to the left. A consistent $h_t$ with error above $\varepsilon$ is possible only if no sample lands in one of these two intervals, which happens with probability at most $2(1-\varepsilon)^m$.</p>
