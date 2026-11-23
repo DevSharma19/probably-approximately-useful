@@ -11,32 +11,135 @@
 </head>
 <body data-page="6-beyond.html" data-root="../">
 <main>
-  <h1>6. Beyond</h1>
+  <h1>6. Beyond: Connections to Complexity Theory</h1>
 
-  <div class="todo todo-main">
-    <p class="todo-title">To do: Chapter 6</p>
-    <p><strong>Write</strong></p>
-    <ul>
-      <li>Definition of efficient PAC learning (polynomial time in $1/\varepsilon$, $1/\delta$, input size).</li>
-      <li>3-term DNF: proper learning NP-hard unless RP = NP; learnable via 3-CNF. Sketch the reduction idea.</li>
-      <li>Decide which further directions to keep (agnostic, Occam/compression, crypto hardness, deep learning) or cut.</li>
-      <li>Short conclusion tying the site back to complexity theory.</li>
-    </ul>
-    <p><strong>Proof-check</strong></p>
-    <ul>
-      <li>3-term DNF hardness attribution and statement (Pitt &amp; Valiant 1988; Kearns &amp; Vazirani Ch. 1).</li>
-      <li>Reference details (authors, years, venues).</li>
-    </ul>
-  </div>
 
-  <p>The Fundamental Theorem is about <em>samples</em>, not <em>time</em>. A complexity theorist should ask:
-    even when few samples suffice, can we find a good hypothesis efficiently?</p>
+  <p>The Fundamental Theorem counts <em>samples</em>, not <em>time</em>. It says when a learner can succeed with few examples.
+    It does not say whether a learner can find a good hypothesis quickly. This chapter connects learning to the rest of complexity theory.
+    It states results without proof and points to the sources.</p>
 
   <h2>Efficient learnability</h2>
-  <p class="todo">TODO: efficient PAC learning (polynomial time in $1/\varepsilon$, $1/\delta$, and the input size). ERM can be NP-hard: properly learning 3-term DNF is NP-hard unless RP = NP, yet it is efficiently learnable using 3-CNF as the hypothesis class.</p>
+  <p>To talk about running time, the domain needs a size. Let $\mathcal{X}_n = \{0,1\}^n$ and let $\mathcal{H}_n$ be a class over $\mathcal{X}_n$.
+    Each $h \in \mathcal{H}_n$ has a description of size $\mathrm{size}(h)$, such as the length of a formula.</p>
 
-  <h2>Further directions</h2>
-  <p class="todo">TODO (optional): agnostic learning, Occam's razor and sample compression, cryptographic hardness of learning, and why modern neural networks generalize despite a huge VC dimension.</p>
+  <div class="definition" data-name="(Efficient PAC learning)">
+    $\mathcal{H} = \bigcup_n \mathcal{H}_n$ is <em>efficiently PAC learnable</em> if some algorithm $A$ PAC learns each $\mathcal{H}_n$,
+    runs in time polynomial in $n$, $\mathrm{size}(h^\star)$, $1/\varepsilon$, and $1/\delta$, and outputs a hypothesis that can be evaluated in polynomial time.
+  </div>
+  <div class="definition" data-name="(Proper and improper learning)">
+    $A$ is <em>proper</em> if it always outputs some $h \in \mathcal{H}_n$. Otherwise it is <em>improper</em>: it may output a hypothesis from a larger class.
+  </div>
+  <div class="definition" data-name="(Consistency problem)">
+    Given a labeled sample $S$ over $\mathcal{X}_n$, decide whether some $h \in \mathcal{H}_n$ is consistent with $S$.
+  </div>
+  <p>Under realizability, ERM must solve the consistency problem. So the complexity of ERM is the complexity of this search problem.</p>
+
+  <div class="example" data-result="Conjunctions are efficiently and properly learnable">
+    <p>Let $\mathcal{H}_n$ be conjunctions of literals over $x_1, \dots, x_n$, such as $x_1 \wedge \neg x_3$.
+      The <em>elimination algorithm</em> starts with all $2n$ literals. For each positive example, it deletes every literal the example falsifies.
+      It outputs the conjunction of what remains. It runs in time $O(nm)$. Under realizability, its output is consistent with the sample.</p>
+  </div>
+
+  <div class="theorem" data-name="(Pitt–Valiant 1988)">
+    Suppose every $h \in \mathcal{H}_n$ has size polynomial in $n$. If $\mathcal{H}$ is efficiently and properly PAC learnable, then the consistency problem for $\mathcal{H}$ is in RP.
+    So if the consistency problem is NP-hard, proper efficient learning of $\mathcal{H}$ implies $\mathrm{NP} = \mathrm{RP}$.
+  </div>
+
+  <div class="example" data-result="3-term DNF: hard to learn properly, easy to learn improperly">
+    <p>A <em>3-term DNF</em> is a formula $T_1 \vee T_2 \vee T_3$ where each $T_c$ is a conjunction of literals.
+      Pitt and Valiant (1988) showed that its consistency problem is NP-hard, by a reduction from graph 3-coloring.
+      So 3-term DNF is not efficiently properly learnable unless $\mathrm{NP} = \mathrm{RP}$.</p>
+    <p>But every 3-term DNF is also a 3-CNF:
+      $$T_1 \vee T_2 \vee T_3 = \bigwedge_{u \in T_1,\ v \in T_2,\ w \in T_3} (u \vee v \vee w).$$
+      A 3-CNF is a conjunction over the $O(n^3)$ possible clauses. The elimination algorithm learns it in polynomial time.
+      So the hardness comes from the required output format, not from the concept class.</p>
+  </div>
+
+  <h3>Hardness for every output format</h3>
+  <p>Some classes are hard to learn even improperly. Then the hardness rests on assumptions from cryptography or average-case complexity, not on $\mathrm{P} \ne \mathrm{NP}$ alone.
+    The common idea: if a class can compute pseudorandom functions, an efficient learner would distinguish them from random functions.</p>
+  <ul>
+    <li><strong>Kearns and Valiant (1994).</strong> Assuming problems such as breaking RSA are hard, Boolean formulas, deterministic finite automata, and constant-depth threshold circuits are not efficiently PAC learnable.</li>
+    <li><strong>Klivans and Sherstov (2009).</strong> A polynomial-time learner for intersections of $n^{\varepsilon}$ halfspaces would solve certain approximate lattice problems in the worst case. The reduction uses Regev's lattice-based cryptosystems.</li>
+    <li><strong>Daniely and Shalev-Shwartz (2016).</strong> Assuming that refuting random $K$-SAT formulas is hard, DNF formulas with $\omega(\log n)$ terms are not efficiently learnable.
+      It was one of the first hardness-of-learning results based on an assumption other than cryptography.</li>
+  </ul>
+
+  <h2>Recent results on sample complexity</h2>
+  <p>The Fundamental Theorem left some questions open. Recent work answers several of them.</p>
+
+  <div class="theorem" data-name="(Optimal PAC learning; Hanneke 2016)">
+    Every class of VC dimension $d$ has a PAC learner with sample complexity $O\big((d + \log(1/\delta))/\varepsilon\big)$ in the realizable case.
+  </div>
+  <p>This removes the $\log(1/\varepsilon)$ factor from Chapter 5 and matches the lower bound. Hanneke's learner is not plain ERM.
+    It runs ERM on many subsamples and takes a majority vote. Larsen (2023) showed that bagging, a standard method from practice, is also optimal.</p>
+
+  <div class="theorem" data-name="(Compression; Moran–Yehudayoff 2016)">
+    Every class of VC dimension $d$ has a sample compression scheme of size $\exp(O(d))$.
+  </div>
+  <p>A compression scheme keeps a few sample points and rebuilds a consistent hypothesis from them. Littlestone and Warmuth (1986) showed that compression implies learnability.
+    Moran and Yehudayoff showed the converse: learnability implies compression. Whether size $O(d)$ always suffices was left open.</p>
+
+  <div class="theorem" data-name="(Universal learning; Bousquet et al. 2021)">
+    Fix a class $\mathcal{H}$. Ask how fast the expected error can decay in $m$ for every realizable distribution, allowing constants that depend on the distribution.
+    The optimal rate is always exponential ($e^{-m}$), linear ($1/m$), or arbitrarily slow. Combinatorial properties of $\mathcal{H}$ decide which case holds.
+  </div>
+
+  <div class="definition" data-name="(Littlestone dimension)">
+    A <em>mistake tree</em> of depth $k$ is a complete binary tree whose internal nodes are labeled by points of $\mathcal{X}$.
+    Each root-to-leaf path assigns a label to each node on it: 0 for going left, 1 for going right.
+    $\mathcal{H}$ <em>shatters</em> the tree if every path's labels are realized by some $h \in \mathcal{H}$.
+    The <em>Littlestone dimension</em> $\mathrm{Ldim}(\mathcal{H})$ is the largest depth of a shattered tree.
+  </div>
+  <p>Always $\mathrm{VCdim}(\mathcal{H}) \le \mathrm{Ldim}(\mathcal{H})$. The gap can be infinite: thresholds on $\mathbb{R}$ have VC dimension 1 but infinite Littlestone dimension.
+    Finite Littlestone dimension characterizes <em>online</em> learning, where examples arrive one at a time and the learner must predict each label.</p>
+
+  <div class="theorem" data-name="(Private learning; Alon et al. 2019, Bun–Livni–Moran 2020)">
+    A class is PAC learnable by an (approximately) differentially private algorithm if and only if its Littlestone dimension is finite.
+  </div>
+  <p>An algorithm is <em>differentially private</em> if changing one example changes its output distribution only slightly.
+    So thresholds on $\mathbb{R}$ are PAC learnable but not privately PAC learnable. Privacy needs a stronger property than finite VC dimension.</p>
+
+  <div class="example" data-result="Learnability can be undecidable">
+    <p>Ben-David, Hrubeš, Moran, Shpilka, and Yehudayoff (2019) studied a learning model called EMX ("estimating the maximum").
+      They found a class whose EMX learnability can be neither proved nor refuted from the standard axioms of mathematics (ZFC).
+      The answer depends on the continuum hypothesis. PAC learning avoids this: the VC dimension gives a combinatorial characterization.</p>
+  </div>
+
+  <h2>Limitations: deep learning</h2>
+  <p>Neural networks are the most successful learners in practice. The theory on this site explains their success poorly.</p>
+
+  <div class="theorem" data-name="(VC dimension of ReLU networks; Bartlett et al. 2019)">
+    Networks with ReLU activations, $W$ weights, and $L$ layers have VC dimension $O(WL\log W)$. Some such networks have VC dimension $\Omega(WL\log(W/L))$.
+  </div>
+  <p>So VC bounds call for more samples than there are weights. Modern networks have far more weights than training examples.
+    Zhang et al. (2017) showed that such networks can fit training data with <em>random</em> labels. So the class can realize essentially any labeling of the training set, and VC bounds say nothing.
+    Yet on real labels the same networks generalize well.</p>
+  <ul>
+    <li><strong>Uniform convergence may not be enough.</strong> Nagarajan and Kolter (2019) gave settings where overparameterized models trained by gradient descent generalize,
+      but every two-sided uniform convergence bound is nearly vacuous. This holds even after accounting for the implicit bias of gradient descent.</li>
+    <li><strong>Double descent.</strong> Belkin, Hsu, Ma, and Mandal (2019) observed that test error can fall again as model size grows past the point of fitting the data exactly.
+      The classical picture predicts only overfitting there.</li>
+    <li><strong>Benign overfitting.</strong> Bartlett, Long, Lugosi, and Tsigler (2020) characterized when fitting noisy data exactly still gives good predictions in linear regression.
+      It requires many more unimportant directions in parameter space than samples.</li>
+    <li><strong>Nonvacuous bounds.</strong> Dziugaite and Roy (2017) used PAC-Bayes bounds, which depend on the trained network rather than the whole class.
+      They computed nonvacuous error bounds for stochastic networks with millions of parameters.</li>
+  </ul>
+  <p>Training is also hard in the worst case.</p>
+  <ul>
+    <li><strong>Blum and Rivest (1992).</strong> Deciding whether a 3-node network of threshold units can fit a training set is NP-complete.</li>
+    <li><strong>Chen, Gollakota, Klivans, and Meka (2022).</strong> Learning two-hidden-layer ReLU networks on Gaussian inputs needs superpolynomially many queries in the statistical query model,
+      even without noise. They also give cryptographic hardness, under the Learning with Rounding assumption.</li>
+  </ul>
+  <p>So real data must have structure that worst-case theory ignores. Finding that structure is an open problem.</p>
+
+  <h2>Summary</h2>
+  <ul>
+    <li>Finite VC dimension is necessary and sufficient for learning from few samples.</li>
+    <li>Efficient learning needs more. Proper learning can be NP-hard even when improper learning is easy. Some classes are hard to learn in any form under cryptographic assumptions.</li>
+    <li>Recent work pins down optimal sample complexity and connects learning to compression, privacy, and logic.</li>
+    <li>Deep learning sits outside the worst-case theory. Explaining it is an active research area.</li>
+  </ul>
 
   <h2>References</h2>
   <ul>
@@ -44,7 +147,33 @@
     <li>M. Kearns and U. Vazirani, <em>An Introduction to Computational Learning Theory</em>, MIT Press, 1994.</li>
     <li>L. Valiant, "A Theory of the Learnable," <em>Communications of the ACM</em>, 1984.</li>
     <li>A. Blumer, A. Ehrenfeucht, D. Haussler, and M. Warmuth, "Learnability and the Vapnik–Chervonenkis Dimension," <em>Journal of the ACM</em>, 1989.</li>
+    <li>V. Vapnik and A. Chervonenkis, "On the Uniform Convergence of Relative Frequencies of Events to Their Probabilities," <em>Theory of Probability and Its Applications</em>, 1971.</li>
+    <li>N. Sauer, "On the Density of Families of Sets," <em>Journal of Combinatorial Theory, Series A</em>, 1972.</li>
+    <li>S. Shelah, "A Combinatorial Problem; Stability and Order for Models and Theories in Infinitary Languages," <em>Pacific Journal of Mathematics</em>, 1972.</li>
+    <li>M. Anthony and P. Bartlett, <em>Neural Network Learning: Theoretical Foundations</em>, Cambridge University Press, 1999.</li>
+    <li>A. Ehrenfeucht, D. Haussler, M. Kearns, and L. Valiant, "A General Lower Bound on the Number of Examples Needed for Learning," <em>Information and Computation</em>, 1989.</li>
+    <li>L. Pitt and L. Valiant, "Computational Limitations on Learning from Examples," <em>Journal of the ACM</em>, 1988.</li>
+    <li>M. Kearns and L. Valiant, "Cryptographic Limitations on Learning Boolean Formulae and Finite Automata," <em>Journal of the ACM</em>, 1994.</li>
+    <li>A. Klivans and A. Sherstov, "Cryptographic Hardness for Learning Intersections of Halfspaces," <em>Journal of Computer and System Sciences</em>, 2009.</li>
+    <li>A. Daniely and S. Shalev-Shwartz, "Complexity Theoretic Limitations on Learning DNF's," <em>COLT</em>, 2016.</li>
+    <li>S. Hanneke, "The Optimal Sample Complexity of PAC Learning," <em>Journal of Machine Learning Research</em> 17, 2016.</li>
+    <li>K. G. Larsen, "Bagging is an Optimal PAC Learner," <em>COLT</em>, 2023.</li>
+    <li>N. Littlestone and M. Warmuth, "Relating Data Compression and Learnability," unpublished manuscript, 1986.</li>
+    <li>S. Moran and A. Yehudayoff, "Sample Compression Schemes for VC Classes," <em>Journal of the ACM</em> 63(3), 2016.</li>
+    <li>O. Bousquet, S. Hanneke, S. Moran, R. van Handel, and A. Yehudayoff, "A Theory of Universal Learning," <em>STOC</em>, 2021.</li>
+    <li>N. Alon, R. Livni, M. Malliaris, and S. Moran, "Private PAC Learning Implies Finite Littlestone Dimension," <em>STOC</em>, 2019.</li>
+    <li>M. Bun, R. Livni, and S. Moran, "An Equivalence Between Private Classification and Online Prediction," 2020 (arXiv:2003.00563).</li>
+    <li>S. Ben-David, P. Hrubeš, S. Moran, A. Shpilka, and A. Yehudayoff, "Learnability Can Be Undecidable," <em>Nature Machine Intelligence</em> 1, 2019.</li>
+    <li>P. Bartlett, N. Harvey, C. Liaw, and A. Mehrabian, "Nearly-Tight VC-Dimension and Pseudodimension Bounds for Piecewise Linear Neural Networks," <em>Journal of Machine Learning Research</em> 20, 2019.</li>
+    <li>C. Zhang, S. Bengio, M. Hardt, B. Recht, and O. Vinyals, "Understanding Deep Learning Requires Rethinking Generalization," <em>ICLR</em>, 2017.</li>
+    <li>V. Nagarajan and J. Z. Kolter, "Uniform Convergence May Be Unable to Explain Generalization in Deep Learning," <em>NeurIPS</em>, 2019.</li>
+    <li>M. Belkin, D. Hsu, S. Ma, and S. Mandal, "Reconciling Modern Machine-Learning Practice and the Classical Bias–Variance Trade-Off," <em>PNAS</em> 116(32), 2019.</li>
+    <li>P. Bartlett, P. Long, G. Lugosi, and A. Tsigler, "Benign Overfitting in Linear Regression," <em>PNAS</em> 117(48), 2020.</li>
+    <li>G. K. Dziugaite and D. Roy, "Computing Nonvacuous Generalization Bounds for Deep (Stochastic) Neural Networks with Many More Parameters than Training Data," <em>UAI</em>, 2017.</li>
+    <li>A. Blum and R. Rivest, "Training a 3-Node Neural Network is NP-Complete," <em>Neural Networks</em> 5(1), 1992.</li>
+    <li>S. Chen, A. Gollakota, A. Klivans, and R. Meka, "Hardness of Noise-Free Learning for Two-Hidden-Layer Neural Networks," <em>NeurIPS</em>, 2022.</li>
   </ul>
+
 </main>
 <script src="../js/nav.js"></script>
 </body>

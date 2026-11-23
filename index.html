@@ -14,36 +14,54 @@
   <h1>Probably Approximately Useful</h1>
   <p><em>VC dimension and the Fundamental Theorem of PAC Learning</em></p>
 
-  <div class="todo todo-main">
-    <p class="todo-title">To do: Site-wide</p>
-    <p><strong>Write</strong></p>
-    <ul>
-      <li>Motivating hook for the home page (spam filter story, or why counting $|\mathcal{H}|$ fails for infinite classes).</li>
-      <li>A short notation reference (domain, distribution, loss, sample) that all chapters share.</li>
-      <li>Footer with your name, course (15-455), and semester.</li>
-    </ul>
-    <p><strong>Proof-check</strong></p>
-    <ul>
-      <li>Final read-through of every theorem statement against Shalev-Shwartz &amp; Ben-David (SSBD).</li>
-    </ul>
-    <p><strong>Test &amp; polish</strong></p>
-    <ul>
-      <li>Read the whole single-scroll page on a phone: nav bar, math overflow, both widgets.</li>
-      <li>Remove all yellow TODO callouts (including these) before submitting.</li>
-    </ul>
-  </div>
 
+  <p>Computational learning theory is a distinctive model within complexity theory. It asks what a <em>learner</em> can learn from labeled examples.
+    Can it label new examples correctly? How many examples does it need?</p>
 
-  <p>When can a machine learn a concept from examples? This site answers one precise version of that question:
-    a class of classifiers is learnable from a finite number of samples <strong>if and only if</strong>
-    its VC dimension is finite.</p>
+  <p>We start with an example from
+    <a href="https://david-abel.github.io/blog/posts/learning_theory.html">David Abel</a>.
+    Alice is teaching Boris English. She starts with the word "banana".</p>
 
-  <p class="todo">TODO: motivating hook, such as the "learning to spot spam" story or why counting $|\mathcal{H}|$ breaks down for infinite classes.</p>
+  <figure class="comic">
+    <a href="images/banana-comic.png" data-lightbox title="Enlarge"><img src="images/banana-comic.png" width="2880" height="2674" loading="lazy"
+      alt="Four-panel comic. 1: Alice points at a banana and says 'Banana!'. Boris wonders if it means yellow, fruit, curved, or banana. 2: She points at an old brown banana. Boris crosses out yellow and wonders about brown, rotten, or banana. 3: After many bananas (green, ripe, tiny, spotty), Boris crosses out yellow, brown, and rotten. Only banana is left. 4: Boris points to a banana he has never seen, in a fruit bowl, and says 'Banana!'. Alice says 'Yes!'."></a>
+    <figcaption>Learning "banana" from examples. Tap to enlarge.</figcaption>
+  </figure>
+
+  <ol>
+    <li>Alice points at a banana and says "banana". Boris does not know what the word means. It could mean yellow, fruit, curved, or banana.</li>
+    <li>She points at a second banana, an old brown one. This rules out yellow. Boris now wonders about brown or rotten.</li>
+    <li>She shows more bananas: green, ripe, tiny, spotty. Each one rules out more guesses. Only "banana" fits them all.</li>
+    <li>Boris sees a banana he has never seen before. He labels it himself, and he is right.</li>
+  </ol>
+  <p>Boris's guesses form a <strong>hypothesis class</strong>. Each example rules out the guesses that disagree with it.
+    Boris has learned when he labels a new example correctly.</p>
+
+  <p>The main application is machine learning. The question we care about most is how many examples a learner needs.
+    The answer depends on the hypothesis class $\mathcal{H}$, and in particular on whether it is finite or infinite.</p>
+  <p>For a finite class $\mathcal{H}$, about $\log|\mathcal{H}|/\varepsilon$ examples suffice. But most useful classes are infinite.
+    Thresholds on $\mathbb{R}$ already have infinitely many hypotheses, and they are easy to learn.</p>
+  <p>The right measure of size is the <strong>VC dimension</strong>. The main result of this site is the Fundamental Theorem of PAC Learning:
+    a class is learnable from finitely many samples <strong>if and only if</strong> its VC dimension is finite.
+    The last chapter asks the complexity theorist's question: when is learning also <em>efficient</em>?</p>
 
   <h2>Who this is for</h2>
   <p>Students who have taken 15-455 (Undergraduate Complexity Theory). We assume comfort with proofs,
     asymptotic notation, and basic discrete probability (union bound, expectation, concentration).
     No machine learning background is needed.</p>
+
+  <h2>Notation</h2>
+  <table class="notation">
+    <tr><td>$\mathcal{X}$</td><td>domain (the set of possible inputs)</td></tr>
+    <tr><td>$\mathcal{D}$</td><td>unknown distribution over labeled examples $\mathcal{X} \times \{0,1\}$</td></tr>
+    <tr><td>$S$, $m$</td><td>sample $((x_1,y_1),\dots,(x_m,y_m)) \sim \mathcal{D}^m$ and its size</td></tr>
+    <tr><td>$\mathcal{H}$, $h$</td><td>hypothesis class, and a hypothesis $h : \mathcal{X} \to \{0,1\}$</td></tr>
+    <tr><td>$L_{\mathcal{D}}(h)$</td><td>true error $\Pr_{(x,y)\sim\mathcal{D}}[h(x) \ne y]$</td></tr>
+    <tr><td>$L_S(h)$</td><td>empirical error: the fraction of $S$ that $h$ mislabels</td></tr>
+    <tr><td>$\varepsilon$, $\delta$</td><td>accuracy and confidence parameters</td></tr>
+    <tr><td>$d$</td><td>VC dimension of $\mathcal{H}$</td></tr>
+    <tr><td>$\tau_{\mathcal{H}}(m)$</td><td>growth function: the most labelings $\mathcal{H}$ gives any $m$ points</td></tr>
+  </table>
 
   <div id="toc">
   <h2>Chapters</h2>
@@ -53,11 +71,10 @@
     <li><a href="chapters/3-sauer-shelah.html">The Sauer–Shelah Lemma</a>: from exponential to polynomial (interactive)</li>
     <li><a href="chapters/4-uniform-convergence.html">Uniform Convergence</a>: why empirical error tracks true error</li>
     <li><a href="chapters/5-fundamental-theorem.html">The Fundamental Theorem</a>: finite VC dimension ⇔ PAC learnable</li>
-    <li><a href="chapters/6-beyond.html">Beyond</a>: computational efficiency and further directions</li>
+    <li><a href="chapters/6-beyond.html">Beyond</a>: connections to complexity theory, recent results, and deep learning</li>
   </ol>
   </div>
-  <p>Each chapter ends with exercises; solutions are hidden until you click.
-    Scroll down to read the whole site in one go, or jump to a chapter from the bar at the top.</p>
+  <p>Scroll down to read the whole site in one go, or jump to a chapter from the bar at the top.</p>
 
   <!-- nav.js loads every chapter in here (single-scroll view) -->
   <div id="chapters"></div>
@@ -65,5 +82,6 @@
 <script src="js/nav.js"></script>
 <script src="js/shattering.js"></script>
 <script src="js/growth.js"></script>
+<script src="js/lightbox.js"></script>
 </body>
 </html>

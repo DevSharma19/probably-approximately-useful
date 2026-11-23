@@ -61,7 +61,7 @@ a { color: var(--accent); }
 .definition { border-left-color: #0969da; }
 .theorem, .lemma { border-left-color: var(--accent); }
 .example { border-left-color: var(--pos); }
-.definition::before, .theorem::before, .lemma::before, .proof::before, .example::before {
+.definition::before, .theorem::before, .lemma::before, .example::before {
   font-family: system-ui, sans-serif;
   font-weight: 700;
   display: block;
@@ -70,7 +70,6 @@ a { color: var(--accent); }
 .theorem::before    { content: "Theorem " attr(data-name); }
 .lemma::before      { content: "Lemma " attr(data-name); }
 .example::before    { content: "Example " attr(data-name); }
-.proof::before      { content: "Proof"; font-style: italic; font-weight: 400; }
 
 /* Exercises */
 .exercise { margin: 1rem 0; }
@@ -147,3 +146,97 @@ section.chapter {
 .todo-main p { margin: 0.6rem 0 0.2rem; }
 .todo-main ul { margin: 0; padding-left: 1.2rem; }
 .todo-main li { margin: 0.15rem 0; }
+
+/* Figures (inline SVG): scale to the column, capped so text stays a normal size. */
+.figure { margin: 1.5rem auto; max-width: 400px; }
+.figure svg { width: 100%; height: auto; display: block; }
+
+/* Notation table */
+table.notation { border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+table.notation td { border-bottom: 1px solid var(--border); padding: 0.3rem 0.8rem 0.3rem 0; vertical-align: top; }
+table.notation td:first-child { white-space: nowrap; }
+
+/* Footer */
+footer.site {
+  max-width: 46rem;
+  margin: 3rem auto 0;
+  padding: 1rem 1.5rem 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+}
+.todo-inline { background: #fff8c5; padding: 0 0.3rem; }
+
+/* Full-width illustration with a caption */
+.comic { margin: 1.5rem 0; }
+.comic img { width: 100%; height: auto; display: block; border: 1px solid var(--border); border-radius: 4px; }
+.comic figcaption { margin-top: 0.4rem; color: var(--muted); font-family: system-ui, sans-serif; font-size: 0.85rem; text-align: center; }
+
+/* Lightbox (js/lightbox.js) */
+body.lightbox-open { overflow: hidden; }
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 20, 20, 0.88);
+  display: flex;
+  overflow: auto;
+  padding: 1rem;
+  animation: lightbox-fade 0.18s ease-out;
+}
+.lightbox img {
+  margin: auto;            /* centers when it fits, scrolls from the edge when zoomed */
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 4px;
+  cursor: zoom-in;
+  animation: lightbox-grow 0.18s ease-out;
+}
+.lightbox img.zoomed { max-width: none; max-height: none; width: min(2880px, 250vw); cursor: zoom-out; }
+.lightbox-close {
+  position: fixed;
+  top: 0.6rem;
+  right: 0.8rem;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.lightbox-close:hover, .lightbox-close:focus-visible { background: rgba(255, 255, 255, 0.3); }
+@keyframes lightbox-fade { from { opacity: 0; } }
+@keyframes lightbox-grow { from { transform: scale(0.96); } }
+@media (prefers-reduced-motion: reduce) { .lightbox, .lightbox img { animation: none; } }
+.comic a { cursor: zoom-in; }
+
+/* Collapsible proofs: <details class="proof"><summary>Proof</summary>…</details> */
+details.proof > summary {
+  cursor: pointer;
+  font-style: italic;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 0.95rem;
+}
+details.proof > summary:hover { color: var(--fg); }
+details.proof[open] > summary { margin-bottom: 0.4rem; }
+
+/* Corollary box (same style as theorems) */
+.corollary {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  background: var(--box);
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+}
+.corollary::before { content: "Corollary " attr(data-name); font-family: system-ui, sans-serif; font-weight: 700; display: block; }
+.corollary > p:first-child { margin-top: 0.3rem; }
+@media (max-width: 640px) { .corollary { padding: 0.5rem 0.7rem; } }
+
+/* Example boxes titled by their result: <div class="example" data-result="…"> */
+.example[data-result]::before { content: attr(data-result); }
+.example + details.proof { margin-top: -0.6rem; }

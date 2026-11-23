@@ -13,63 +13,98 @@
 <main>
   <h1>3. The Sauer–Shelah Lemma</h1>
 
-  <div class="todo todo-main">
-    <p class="todo-title">To do: Chapter 3</p>
-    <p><strong>Write</strong></p>
-    <ul>
-      <li>Intuition for the growth function before the definition.</li>
-      <li>How to read the growth plot (log scale, what happens at $m=d$).</li>
-      <li>Proof of Sauer–Shelah by induction (the "shattered subsets" strengthening).</li>
-      <li>Proof of $\sum_{i\le d}\binom{m}{i} \le (em/d)^d$.</li>
-      <li>"Why this matters" bridge to Ch. 4.</li>
-      <li>Solutions to Exercises 3.1 and 3.2.</li>
-    </ul>
-    <p><strong>Proof-check</strong></p>
-    <ul>
-      <li>Lemma statement and the $(em/d)^d$ bound's condition $m \ge d$ (SSBD Lemma 6.10 and its appendix).</li>
-      <li>Exercise 3.1 answers: $m+1$ for thresholds, $\binom{m+1}{2}+1$ for intervals.</li>
-      <li>Exercise 3.2 tightness example (sets of size $\le d$ over infinite $\mathcal{X}$).</li>
-    </ul>
-    <p><strong>Test &amp; polish</strong></p>
-    <ul>
-      <li>Growth plot on a phone: axis labels readable, legend wraps cleanly.</li>
-    </ul>
-  </div>
 
+  <p>Chapter 2 asked whether $\mathcal{H}$ can realize every labeling of one set.
+    This chapter asks how many labelings it can realize on $m$ points, as a function of $m$.
+    That count, not $|\mathcal{H}|$, controls how many samples a learner needs.</p>
 
+  <h2>The growth function</h2>
   <div class="definition" data-name="(Growth function)">
     $\tau_{\mathcal{H}}(m) = \max_{C \subseteq \mathcal{X},\, |C| = m} |\mathcal{H}_C|$.
   </div>
-  <p>Always $\tau_{\mathcal{H}}(m) \le 2^m$, with equality exactly when some $m$-point set is shattered, so equality holds iff $m \le \mathrm{VCdim}(\mathcal{H})$.
-    The surprise: once $m$ passes the VC dimension, the growth function is only <em>polynomial</em>.</p>
+  <p>The maximum is over all sets of $m$ points. So $\tau_{\mathcal{H}}(m)$ is a worst case.
+    It is the largest number of distinct behaviors $\mathcal{H}$ can show on $m$ points.</p>
+  <p>Two simple bounds hold.</p>
+  <ul>
+    <li>$\tau_{\mathcal{H}}(m) \le 2^m$, since $m$ points have only $2^m$ labelings. Equality holds exactly when some $m$-point set is shattered, that is, when $m \le \mathrm{VCdim}(\mathcal{H})$.</li>
+    <li>$\tau_{\mathcal{H}}(m) \le |\mathcal{H}|$, since each labeling comes from at least one hypothesis. So the growth function is never worse than the count from Chapter 1.</li>
+  </ul>
 
+  <div class="example" data-result="Growth functions of thresholds and intervals">
+    <p>Take $m$ distinct points on $\mathbb{R}$ in sorted order.</p>
+    <ul>
+      <li><em>Thresholds.</em> The points labeled 1 form a suffix. There are $m+1$ suffixes, so $\tau_{\mathcal{H}}(m) = m + 1$.</li>
+      <li><em>Intervals.</em> The points labeled 1 form a contiguous run, possibly empty. A nonempty run is fixed by its first and last point. So $\tau_{\mathcal{H}}(m) = \binom{m+1}{2} + 1$.</li>
+    </ul>
+  </div>
+  <p>Both classes are infinite, yet both growth functions are polynomials in $m$. The degree matches the VC dimension: 1 for thresholds, 2 for intervals.
+    The Sauer–Shelah lemma says this always happens.</p>
+
+  <h2>The lemma</h2>
   <div class="lemma" data-name="(Sauer–Shelah–Perles)">
     If $\mathrm{VCdim}(\mathcal{H}) \le d$, then for all $m$,
-    $$\tau_{\mathcal{H}}(m) \le \sum_{i=0}^{d} \binom{m}{i}, \qquad\text{and for } m \ge d,\quad \sum_{i=0}^{d}\binom{m}{i} \le \left(\frac{em}{d}\right)^d.$$
+    $$\tau_{\mathcal{H}}(m) \le \sum_{i=0}^{d} \binom{m}{i}.$$
+    If also $m \ge d \ge 1$, then $\sum_{i=0}^{d}\binom{m}{i} \le \left(\frac{em}{d}\right)^d$.
   </div>
+  <p>Read the bound as a count. $\binom{m}{i}$ is the number of subsets of size $i$. So the sum counts the subsets of an $m$-point set with at most $d$ elements.
+    For fixed $d$, this is $O(m^d)$. The form $(em/d)^d$ is less exact but easier to use in calculations.</p>
+  <p>There is no middle ground. If $\mathrm{VCdim}(\mathcal{H}) = \infty$, then $\tau_{\mathcal{H}}(m) = 2^m$ for every $m$.
+    If $\mathrm{VCdim}(\mathcal{H}) = d$, then $\tau_{\mathcal{H}}(m)$ is at most a polynomial of degree $d$.
+    So every growth function is either $2^m$ for all $m$ or polynomially bounded.</p>
+  <p>The bound is tight. Thresholds and intervals meet it with equality, since $m + 1 = \binom{m}{0} + \binom{m}{1}$ and $\binom{m+1}{2} + 1 = \binom{m}{0} + \binom{m}{1} + \binom{m}{2}$.
+    So does the class of indicators of sets with at most $d$ elements: on any $m$ points, it realizes exactly the subsets of size at most $d$.</p>
 
-  <h2>See it: exponential vs. polynomial</h2>
-  <p>The y-axis is logarithmic, so $2^m$ is a straight line. The bound matches $2^m$ up to $m = d$, then bends away.</p>
+  <h2>The growth plot</h2>
+  <p>The y-axis is $\log_2$, so $2^m$ is a straight line. The Sauer–Shelah bound equals $2^m$ for $m \le d$.
+    After $m = d$ it bends away and grows like $m^d$. On this scale its slope keeps shrinking, while the slope of $2^m$ stays fixed.
+    So the gap between them grows exponentially. Change $d$ to see where the bend happens.</p>
   <div class="widget" data-widget="growth"></div>
 
   <h2>Proof</h2>
-  <div class="proof">
-    <p class="todo">TODO: prove the stronger statement $|\mathcal{H}_C| \le |\{B \subseteq C : \mathcal{H} \text{ shatters } B\}|$ by induction on $|C|$, splitting on the last point $c_m$. Then note that every shattered $B$ has $|B| \le d$.</p>
+  <p>The proof counts shattered subsets instead of labelings. It charges each labeling of $C$ to a different shattered subset of $C$.
+    Every shattered subset has at most $d$ elements, so it only remains to count small subsets.</p>
+  <div class="lemma" data-name="(Stronger claim)">
+    For every class $\mathcal{H}$ and every finite $C \subseteq \mathcal{X}$,
+    $$|\mathcal{H}_C| \le \big|\{B \subseteq C : \mathcal{H} \text{ shatters } B\}\big|.$$
   </div>
-  <p class="todo">TODO: proof of $\sum_{i\le d}\binom{m}{i} \le (em/d)^d$, multiplying by $(d/m)^d$ and using the binomial theorem.</p>
+  <p>The claim implies the lemma. If $\mathrm{VCdim}(\mathcal{H}) \le d$, every shattered $B$ has $|B| \le d$.
+    There are $\sum_{i=0}^{d}\binom{m}{i}$ subsets of $C$ of size at most $d$.</p>
+  <p>The induction removes one point $c_1$. Labelings of $C$ that differ only at $c_1$ merge into one labeling of the remaining points.
+    We count the merged labelings and the merged pairs separately. Each count is a smaller instance of the claim.</p>
+  <details class="proof"><summary>Proof</summary>
+    <p>Induction on $m = |C|$. For $m = 0$: if $\mathcal{H}$ is nonempty, $\mathcal{H}_C$ has one element (the empty labeling) and the empty set is shattered, so both sides equal 1. If $\mathcal{H}$ is empty, both sides equal 0. The induction step also applies the claim to a subclass $\mathcal{H}'$ that may be empty, so this case matters.</p>
+    <p>Let $m \ge 1$ and $C = \{c_1, \dots, c_m\}$. Let $C' = \{c_2, \dots, c_m\}$. Write $Y = \mathcal{H}_C$. Define</p>
+    <ul>
+      <li>$Y_0 = \{(y_2, \dots, y_m) : (0, y_2, \dots, y_m) \in Y \text{ or } (1, y_2, \dots, y_m) \in Y\}$,</li>
+      <li>$Y_1 = \{(y_2, \dots, y_m) : (0, y_2, \dots, y_m) \in Y \text{ and } (1, y_2, \dots, y_m) \in Y\}$.</li>
+    </ul>
+    <p>Each suffix in $Y_0$ extends to one or two elements of $Y$. The ones that extend to two are exactly $Y_1$. So $|Y| = |Y_0| + |Y_1|$.</p>
+    <p><em>Bound on $|Y_0|$.</em> $Y_0 = \mathcal{H}_{C'}$. By induction,
+      $$\begin{aligned}|Y_0| &amp;\le |\{B \subseteq C' : \mathcal{H} \text{ shatters } B\}| \\ &amp;= |\{B \subseteq C : c_1 \notin B,\ \mathcal{H} \text{ shatters } B\}|.\end{aligned}$$</p>
+    <p><em>Bound on $|Y_1|$.</em> Let $\mathcal{H}'$ be the set of $h \in \mathcal{H}$ that have a partner $h' \in \mathcal{H}$ with
+      $h'(c_1) \ne h(c_1)$ and $h'(c_i) = h(c_i)$ for $i \ge 2$. Then $Y_1 = \mathcal{H}'_{C'}$. By induction,
+      $$|Y_1| \le |\{B \subseteq C' : \mathcal{H}' \text{ shatters } B\}|.$$
+      Suppose $\mathcal{H}'$ shatters $B \subseteq C'$. Each labeling of $B$ is achieved by some $h \in \mathcal{H}'$. Its partner gives the same labeling on $B$ with the opposite label on $c_1$.
+      So $\mathcal{H}$ shatters $B \cup \{c_1\}$. Therefore
+      $$|Y_1| \le |\{B \subseteq C : c_1 \in B,\ \mathcal{H} \text{ shatters } B\}|.$$</p>
+    <p>Add the two bounds. Every shattered $B \subseteq C$ is counted once, according to whether $c_1 \in B$. $\blacksquare$</p>
+  </details>
+
+  <details class="proof"><summary>Proof of the $(em/d)^d$ bound</summary>
+    <p>Let $m \ge d \ge 1$. Then $d/m \le 1$, so $(d/m)^d \le (d/m)^i$ for $i \le d$. Thus
+      $$\begin{aligned}\Big(\frac{d}{m}\Big)^d \sum_{i=0}^{d}\binom{m}{i} &amp;\le \sum_{i=0}^{d}\binom{m}{i}\Big(\frac{d}{m}\Big)^i \\ &amp;\le \sum_{i=0}^{m}\binom{m}{i}\Big(\frac{d}{m}\Big)^i \\ &amp;= \Big(1 + \frac{d}{m}\Big)^m \le e^d.\end{aligned}$$
+      Multiply both sides by $(m/d)^d$. $\blacksquare$</p>
+  </details>
 
   <h2>Why this matters</h2>
-  <p class="todo">TODO: preview that in the finite-class union bound, $\ln|\mathcal{H}|$ can be replaced by roughly $\ln \tau_{\mathcal{H}}(2m) = O(d \log m)$. Chapter 4 makes this precise.</p>
+  <p>Chapter 1 bounded the sample size by $\ln(|\mathcal{H}|/\delta)/\varepsilon$. Its proof used a union bound over every hypothesis in $\mathcal{H}$.
+    For infinite $\mathcal{H}$ that union bound is useless.</p>
+  <p>On a fixed sample, two hypotheses with the same labels look identical. So a union bound only needs one hypothesis per labeling.
+    Chapter 4 makes this precise using a second sample, so the count becomes $\tau_{\mathcal{H}}(2m)$. Compare the two quantities:
+    $$\ln|\mathcal{H}| \qquad \text{versus} \qquad \ln \tau_{\mathcal{H}}(2m) \le d \ln\frac{2em}{d}.$$
+    The right side is finite whenever $d$ is finite. It grows only logarithmically in $m$, while the sample size grows linearly.
+    So for large enough $m$ the sample wins. This is why finite VC dimension gives learnability.</p>
 
-  <h2>Exercises</h2>
-  <div class="exercise">
-    <p><strong>3.1</strong> Compute $\tau_{\mathcal{H}}(m)$ exactly for thresholds and for intervals on $\mathbb{R}$. Compare with the Sauer–Shelah bound.</p>
-    <details><summary>Solution</summary><p class="todo">TODO: thresholds give $m+1$; intervals give $\binom{m+1}{2} + 1$. Both match the bound exactly.</p></details>
-  </div>
-  <div class="exercise">
-    <p><strong>3.2</strong> Show the lemma is tight: give a class with VC dimension $d$ where $\tau_{\mathcal{H}}(m) = \sum_{i=0}^d \binom{m}{i}$ for all $m$.</p>
-    <details><summary>Solution</summary><p class="todo">TODO: indicator functions of subsets of $\mathcal{X}$ with at most $d$ elements, over an infinite $\mathcal{X}$.</p></details>
-  </div>
 </main>
 <script src="../js/nav.js"></script>
 <script src="../js/growth.js"></script>

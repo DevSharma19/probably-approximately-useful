@@ -13,24 +13,6 @@
 <main>
   <h1>4. Uniform Convergence</h1>
 
-  <div class="todo todo-main">
-    <p class="todo-title">To do: Chapter 4</p>
-    <p><strong>Write</strong></p>
-    <ul>
-      <li>Intuition for the agnostic setting: noisy labels, or a class too simple to be perfect (example: thresholds when the true rule is an interval).</li>
-      <li>Motivation: why concentration for one fixed $h$ is not enough (ERM picks $h$ <em>after</em> seeing $S$).</li>
-      <li>Proof of the "Representative ⇒ ERM succeeds" lemma.</li>
-      <li>Decide: full proof or careful sketch of finite VC ⇒ uniform convergence, then write it.</li>
-      <li>Solutions to Exercises 4.1 and 4.2.</li>
-    </ul>
-    <p><strong>Proof-check</strong></p>
-    <ul>
-      <li>Agnostic PAC definition against SSBD Def. 3.3.</li>
-      <li>Exercise 4.2 constant: $\ln(2|\mathcal{H}|/\delta)/(2\varepsilon^2)$ (SSBD Cor. 4.6).</li>
-      <li>Symmetrization outline vs. SSBD Thm 6.11 (SSBD's proof differs; make sure your constants match whichever proof you present).</li>
-    </ul>
-  </div>
-
 
   <h2>Dropping realizability</h2>
   <p>Now remove the realizability assumption. The labels may be noisy, or no hypothesis in $\mathcal{H}$ may be perfect.
@@ -59,26 +41,71 @@
   <div class="lemma" data-name="(Representative ⇒ ERM succeeds)">
     If $S$ is $\tfrac{\varepsilon}{2}$-representative, then any ERM output $h_S$ satisfies $L_{\mathcal{D}}(h_S) \le \min_{h\in\mathcal{H}} L_{\mathcal{D}}(h) + \varepsilon$.
   </div>
-  <p class="todo">TODO: two-line proof.</p>
+  <details class="proof"><summary>Proof</summary>
+    <p>Let $h$ be any element of $\mathcal{H}$. Then
+      $$\begin{aligned}L_{\mathcal{D}}(h_S) &amp;\le L_S(h_S) + \tfrac{\varepsilon}{2} \\ &amp;\le L_S(h) + \tfrac{\varepsilon}{2} \\ &amp;\le L_{\mathcal{D}}(h) + \varepsilon.\end{aligned}$$
+      The first and third steps use representativeness. The second uses that $h_S$ minimizes $L_S$. Take the minimum over $h$. $\blacksquare$</p>
+  </details>
+  <p>So if $\mathcal{H}$ has the uniform convergence property, ERM is an agnostic PAC learner with
+    $m_{\mathcal{H}}(\varepsilon,\delta) \le m^{UC}_{\mathcal{H}}(\varepsilon/2, \delta)$.
+    Take $m \ge m^{UC}_{\mathcal{H}}(\varepsilon/2,\delta)$. With probability at least $1-\delta$, $S$ is $\frac{\varepsilon}{2}$-representative, and the lemma applies.</p>
+
+  <h2>Why one hypothesis is not enough</h2>
+  <p>Fix $h$ before seeing $S$. Then $L_S(h)$ is an average of $m$ i.i.d. indicators with mean $L_{\mathcal{D}}(h)$. Hoeffding's inequality gives
+    $$\Pr\big[|L_S(h) - L_{\mathcal{D}}(h)| &gt; \varepsilon\big] \le 2e^{-2m\varepsilon^2}.$$
+    This does not apply to $h_S$, because $h_S$ is chosen after seeing $S$.
+    For finite $\mathcal{H}$, a union bound over all of $\mathcal{H}$ gives uniform convergence with
+    $m^{UC}_{\mathcal{H}}(\varepsilon,\delta) \le \left\lceil \frac{\ln(2|\mathcal{H}|/\delta)}{2\varepsilon^2} \right\rceil$.
+    Infinite classes need another idea.</p>
 
   <h2>Finite VC dimension ⇒ uniform convergence</h2>
-  <p class="todo">TODO: proof outline.
-    (1) Hoeffding plus a union bound handles finite $\mathcal{H}$.
-    (2) Symmetrization ("ghost sample"): compare $L_S$ with $L_{S'}$ on a second independent sample, so only behavior on $2m$ points matters.
-    (3) On $2m$ points, $\mathcal{H}$ acts like at most $\tau_{\mathcal{H}}(2m) \le (2em/d)^d$ distinct hypotheses (Sauer–Shelah).
-    (4) Union bound over these and solve for $m$.</p>
-  <p class="todo">TODO: decide whether to present the full proof or a careful sketch. Check constants against Shalev-Shwartz &amp; Ben-David, Ch. 6.</p>
+  <p>The finite-class bound fails for infinite $\mathcal{H}$ because its union bound runs over infinitely many hypotheses.
+    But most of those hypotheses are redundant on any given sample. Two hypotheses that label $S$ the same way have the same empirical error.
+    So on a sample of size $m$, $\mathcal{H}$ shows at most $\tau_{\mathcal{H}}(m)$ distinct behaviors.
+    Let $d = \mathrm{VCdim}(\mathcal{H})$. By Sauer–Shelah, that is at most $(em/d)^d$ once $m \ge d$. We would like to replace $|\mathcal{H}|$ in the union bound with this number.</p>
+  <p>There is one catch. The true error $L_{\mathcal{D}}(h)$ depends on $h$ everywhere, not only on the sample.
+    Two hypotheses that agree on $S$ can have different true errors.
+    The fix is to draw a second, independent sample $S'$ of the same size, called a <em>ghost sample</em>.
+    If $L_S(h)$ is far from $L_{\mathcal{D}}(h)$, then it is likely also far from $L_{S'}(h)$.
+    Both of these errors depend only on the $2m$ points in $S$ and $S'$. On those points, $\mathcal{H}$ has at most $\tau_{\mathcal{H}}(2m)$ behaviors.
+    This is why $\tau_{\mathcal{H}}(2m)$ appears in the result below.</p>
 
-  <h2>Exercises</h2>
-  <div class="exercise">
-    <p><strong>4.1</strong> Prove the "Representative ⇒ ERM succeeds" lemma.</p>
-    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  <div class="theorem" data-name="(VC inequality)">
+    For every $\mathcal{H}$, every $\mathcal{D}$, and every $m$ with $m\varepsilon^2 \ge 2$,
+    $$\begin{aligned}&amp;\Pr_{S \sim \mathcal{D}^m}\Big[\exists h \in \mathcal{H} : |L_S(h) - L_{\mathcal{D}}(h)| &gt; \varepsilon\Big] \\ &amp;\qquad\le 4\,\tau_{\mathcal{H}}(2m)\, e^{-m\varepsilon^2/8}.\end{aligned}$$
   </div>
-  <div class="exercise">
-    <p><strong>4.2</strong> Using Hoeffding's inequality and a union bound, show that every finite $\mathcal{H}$ has the uniform convergence property with
-      $m^{UC}_{\mathcal{H}}(\varepsilon,\delta) \le \left\lceil \frac{\ln(2|\mathcal{H}|/\delta)}{2\varepsilon^2} \right\rceil$.</p>
-    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  <p>The proof is beyond the scope of this discussion. It follows the ghost-sample idea above.
+    See Vapnik and Chervonenkis (1971), or Anthony and Bartlett (1999), Theorem 4.3.</p>
+  <p>Compare the two bounds on the probability that some $h$ is far from its true error:
+    $$2\,|\mathcal{H}|\, e^{-2m\varepsilon^2} \qquad \text{versus} \qquad 4\,\tau_{\mathcal{H}}(2m)\, e^{-m\varepsilon^2/8}.$$
+    The constants are worse. But the size of the class, $|\mathcal{H}|$, is replaced by the number of behaviors on $2m$ points.
+    When $d$ is finite, that number is polynomial in $m$, and the exponential term wins.</p>
+
+  <div class="theorem" data-name="(Finite VC dimension ⇒ uniform convergence)">
+    If $\mathrm{VCdim}(\mathcal{H}) = d &lt; \infty$, then $\mathcal{H}$ has the uniform convergence property with
+    $$m^{UC}_{\mathcal{H}}(\varepsilon,\delta) = O\!\left(\frac{d\log(1/\varepsilon) + \log(1/\delta)}{\varepsilon^2}\right).$$
   </div>
+  <details class="proof"><summary>Proof</summary>
+    <p>By Sauer–Shelah, $\tau_{\mathcal{H}}(2m) \le (2em/d)^d$ for $2m \ge d$. The VC inequality's bound is at most $\delta$ when
+      $$m \ge \frac{8}{\varepsilon^2}\Big(d\ln\frac{2em}{d} + \ln\frac{4}{\delta}\Big).$$
+      Here $m$ appears on both sides, but only inside a logarithm on the right. Solving gives the stated bound. $\blacksquare$</p>
+  </details>
+  <p>A finer argument (chaining) removes the $\log(1/\varepsilon)$ factor. This gives $O\big((d + \log(1/\delta))/\varepsilon^2\big)$, which is optimal.</p>
+
+  <h2>Putting the pieces together</h2>
+  <p>We now have every piece of one direction of the main theorem. Each chapter supplied one link:</p>
+  <ol>
+    <li><strong>Chapter 2:</strong> VC dimension measures the size of a class by the largest set it shatters.</li>
+    <li><strong>Chapter 3:</strong> if the VC dimension is $d$, the growth function is at most $(em/d)^d$, a polynomial in $m$.</li>
+    <li><strong>Chapter 4:</strong> a polynomial growth function gives uniform convergence, by the VC inequality.</li>
+    <li><strong>Chapter 4:</strong> uniform convergence makes ERM an agnostic PAC learner, by the "Representative ⇒ ERM succeeds" lemma.
+      Under realizability, the same learner is a PAC learner.</li>
+  </ol>
+  <p>So finite VC dimension implies PAC learnability. This is the <em>sufficiency</em> half of the Fundamental Theorem.</p>
+  <p>The other half is <em>necessity</em>: if the VC dimension is infinite, no learner succeeds.
+    Chapter 2 already contains the idea. If $\mathcal{H}$ shatters a set $C$, then labels on part of $C$ say nothing about the rest.
+    Chapter 5 turns this into a proof, called the No Free Lunch theorem. It then combines both halves into the Fundamental Theorem.</p>
+
 </main>
 <script src="../js/nav.js"></script>
 </body>

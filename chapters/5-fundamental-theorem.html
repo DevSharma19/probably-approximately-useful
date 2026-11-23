@@ -13,24 +13,6 @@
 <main>
   <h1>5. The Fundamental Theorem of PAC Learning</h1>
 
-  <div class="todo todo-main">
-    <p class="todo-title">To do: Chapter 5</p>
-    <p><strong>Write</strong></p>
-    <ul>
-      <li>Roadmap figure for the chain of implications 1⇒2⇒3⇒4⇒6⇒1 and 2⇒5⇒4.</li>
-      <li>Sufficiency section: assemble Ch. 3 and Ch. 4 into a sample complexity bound.</li>
-      <li>No Free Lunch: intuition (the adversary labels the unseen half) and full proof.</li>
-      <li>Corollary: infinite VC dimension ⇒ not PAC learnable.</li>
-      <li>Solutions to Exercises 5.1 and 5.2.</li>
-    </ul>
-    <p><strong>Proof-check</strong></p>
-    <ul>
-      <li>Equivalence list against SSBD Thm 6.7.</li>
-      <li>Quantitative realizable bounds against SSBD Thm 6.8; consider also stating the agnostic bounds $\Theta\big(\frac{d+\log(1/\delta)}{\varepsilon^2}\big)$.</li>
-      <li>No Free Lunch constants ($1/8$, $1/7$) and the condition $m &lt; |\mathcal{X}|/2$ (SSBD Thm 5.1).</li>
-    </ul>
-  </div>
-
 
   <div class="theorem" data-name="(Fundamental Theorem, qualitative)">
     For a class $\mathcal{H}$ of functions $\mathcal{X} \to \{0,1\}$ with 0-1 loss, the following are equivalent:
@@ -46,12 +28,71 @@
 
   <div class="theorem" data-name="(Fundamental Theorem, quantitative)">
     If $\mathrm{VCdim}(\mathcal{H}) = d &lt; \infty$, there are absolute constants $C_1, C_2$ such that, in the realizable case,
-    $$C_1 \frac{d + \log(1/\delta)}{\varepsilon} \;\le\; m_{\mathcal{H}}(\varepsilon,\delta) \;\le\; C_2 \frac{d \log(1/\varepsilon) + \log(1/\delta)}{\varepsilon}.$$
+    $$\begin{aligned}m_{\mathcal{H}}(\varepsilon,\delta) &amp;\ge C_1 \frac{d + \log(1/\delta)}{\varepsilon}, \\ m_{\mathcal{H}}(\varepsilon,\delta) &amp;\le C_2 \frac{d \log(1/\varepsilon) + \log(1/\delta)}{\varepsilon}.\end{aligned}$$
+    In the agnostic case,
+    $$\begin{aligned}m_{\mathcal{H}}(\varepsilon,\delta) &amp;\ge C_1 \frac{d + \log(1/\delta)}{\varepsilon^2}, \\ m_{\mathcal{H}}(\varepsilon,\delta) &amp;\le C_2 \frac{d + \log(1/\delta)}{\varepsilon^2}.\end{aligned}$$
   </div>
-  <p class="todo">TODO: a roadmap figure for the chain of implications: 1⇒2 (Ch. 4 lemma), 2⇒3, 3⇒4, 2⇒5, 5⇒4 (trivial), 4⇒6 (No Free Lunch), 6⇒1 (Ch. 3 and Ch. 4).</p>
+  <p>The sample complexity depends on $\mathcal{H}$ only through $d$. Noise costs a factor of about $1/\varepsilon$.</p>
+  <h2>Roadmap</h2>
+  <p>The proof is a cycle of implications. Each arrow is either a result from an earlier chapter or immediate from the definitions.</p>
+  <figure class="figure">
+    <svg viewBox="0 0 360 400" role="img" aria-label="Implications: 6 to 1 to 2 to 3 to 4, 2 to 5 to 4, and 4 back to 6 by No Free Lunch">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
+        </marker>
+        <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#c41230"/>
+        </marker>
+      </defs>
+      <g font-family="system-ui, sans-serif" font-size="14" text-anchor="middle" fill="#1f2328">
+        <g stroke="#57606a" stroke-width="1.5" fill="#f3f5f7">
+          <rect x="30"  y="20"  width="130" height="48" rx="6"/>
+          <rect x="210" y="20"  width="130" height="48" rx="6"/>
+          <rect x="210" y="110" width="130" height="48" rx="6"/>
+          <rect x="30"  y="200" width="130" height="48" rx="6"/>
+          <rect x="210" y="200" width="130" height="48" rx="6"/>
+          <rect x="210" y="290" width="130" height="48" rx="6"/>
+        </g>
+        <text x="95"  y="40"  font-weight="700">(6)</text><text x="95"  y="59">VCdim &lt; ∞</text>
+        <text x="275" y="40"  font-weight="700">(1)</text><text x="275" y="59">Uniform conv.</text>
+        <text x="275" y="130" font-weight="700">(2)</text><text x="275" y="149">ERM agnostic</text>
+        <text x="95"  y="220" font-weight="700">(5)</text><text x="95"  y="239">ERM PAC</text>
+        <text x="275" y="220" font-weight="700">(3)</text><text x="275" y="239">Agnostic PAC</text>
+        <text x="275" y="310" font-weight="700">(4)</text><text x="275" y="329">PAC learnable</text>
+        <g stroke="#57606a" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+          <line x1="160" y1="44" x2="208" y2="44"/>
+          <line x1="275" y1="68" x2="275" y2="108"/>
+          <line x1="275" y1="158" x2="275" y2="198"/>
+          <path d="M210,134 H95 V198"/>
+          <line x1="275" y1="248" x2="275" y2="288"/>
+          <path d="M95,248 V314 H208"/>
+        </g>
+        <path d="M275,338 V368 H12 V44 H28" stroke="#c41230" stroke-width="1.8" fill="none" marker-end="url(#arrow-red)"/>
+        <text x="150" y="388" fill="#c41230" font-size="13">No Free Lunch</text>
+      </g>
+    </svg>
+  </figure>
+  <ul>
+    <li><strong>6 ⇒ 1:</strong> Sauer–Shelah plus the VC inequality (Chapters 3–4).</li>
+    <li><strong>1 ⇒ 2:</strong> the "Representative ⇒ ERM succeeds" lemma (Chapter 4).</li>
+    <li><strong>2 ⇒ 3</strong> and <strong>5 ⇒ 4:</strong> by definition.</li>
+    <li><strong>3 ⇒ 4</strong> and <strong>2 ⇒ 5:</strong> under realizability, $\min_h L_{\mathcal{D}}(h) = 0$. So an agnostic guarantee is a realizable guarantee.</li>
+    <li><strong>4 ⇒ 6:</strong> No Free Lunch (below).</li>
+  </ul>
 
   <h2>Sufficiency: finite VC ⇒ learnable</h2>
-  <p class="todo">TODO: assemble Sauer–Shelah and uniform convergence from Chapters 3–4.</p>
+  <p>Let $\mathrm{VCdim}(\mathcal{H}) = d &lt; \infty$. Chapter 4 gives uniform convergence with
+    $m^{UC}_{\mathcal{H}}(\varepsilon,\delta) = O\big((d\log(1/\varepsilon) + \log(1/\delta))/\varepsilon^2\big)$.
+    So ERM is an agnostic PAC learner with $m_{\mathcal{H}}(\varepsilon,\delta) \le m^{UC}_{\mathcal{H}}(\varepsilon/2,\delta)$.</p>
+  <p>In the realizable case we can do better. ERM outputs a consistent $h$. We only need that no bad $h$ is consistent.
+    The ghost-sample argument from Chapter 4 adapts to this event:</p>
+  <div class="theorem" data-name="(Realizable case; Blumer et al. 1989)">
+    For $m \ge 8/\varepsilon$,
+    $$\begin{aligned}&amp;\Pr_{S \sim \mathcal{D}^m}\big[\exists h \in \mathcal{H} : L_S(h) = 0 \text{ and } L_{\mathcal{D}}(h) &gt; \varepsilon\big] \\ &amp;\qquad\le 2\,\tau_{\mathcal{H}}(2m)\, 2^{-\varepsilon m/2}.\end{aligned}$$
+  </div>
+  <p>With Sauer–Shelah, this is at most $\delta$ for $m = O\big((d\log(1/\varepsilon) + \log(1/\delta))/\varepsilon\big)$.
+    This matches the upper bound in the quantitative theorem.</p>
 
   <h2>Necessity: infinite VC ⇒ not learnable</h2>
   <div class="theorem" data-name="(No Free Lunch)">
@@ -59,19 +100,43 @@
     and a function $f : \mathcal{X} \to \{0,1\}$ with $L_{\mathcal{D}}(f) = 0$ such that
     $\Pr_{S \sim \mathcal{D}^m}\big[L_{\mathcal{D}}(A(S)) \ge 1/8\big] \ge 1/7$.
   </div>
-  <p class="todo">TODO: apply this to a shattered set $C$ of size $2m$: every labeling of $C$ is in $\mathcal{H}$, so the realizability assumption doesn't help. Give intuition: the learner has seen at most half of $C$, and on the unseen half an adversary can choose the labels.</p>
-  <div class="proof"><p class="todo">TODO: averaging argument over all $2^{2m}$ labelings of $C$ with $\mathcal{D}$ uniform on $C$.</p></div>
+  <p>Idea: put $\mathcal{D}$ on a set $C$ of $2m$ points. The sample misses at least half of $C$. On the missed points, the labels can be anything.
+    The learner has no information about them.</p>
+  <details class="proof"><summary>Proof</summary>
+    <p>Pick $C \subseteq \mathcal{X}$ with $|C| = 2m$. Let $f_1, \dots, f_T$ be the $T = 2^{2m}$ functions $C \to \{0,1\}$.
+      Let $\mathcal{D}_i$ be uniform over $\{(x, f_i(x)) : x \in C\}$. Then $L_{\mathcal{D}_i}(f_i) = 0$.</p>
+    <p><em>Step 1: averaging.</em> There are $k = (2m)^m$ sequences of $m$ points from $C$. Call them $S_1, \dots, S_k$.
+      Let $S_j^i$ be $S_j$ labeled by $f_i$. Each $S_j$ is equally likely under $\mathcal{D}_i^m$. So
+      $$\begin{aligned}&amp;\max_i \mathbb{E}_{S \sim \mathcal{D}_i^m}\big[L_{\mathcal{D}_i}(A(S))\big] \\ &amp;\quad= \max_i \frac{1}{k}\sum_{j=1}^k L_{\mathcal{D}_i}(A(S_j^i)) \\ &amp;\quad\ge \frac{1}{T}\sum_{i=1}^T \frac{1}{k}\sum_{j=1}^k L_{\mathcal{D}_i}(A(S_j^i)) \\ &amp;\quad= \frac{1}{k}\sum_{j=1}^k \frac{1}{T}\sum_{i=1}^T L_{\mathcal{D}_i}(A(S_j^i)) \\ &amp;\quad\ge \min_j \frac{1}{T}\sum_{i=1}^T L_{\mathcal{D}_i}(A(S_j^i)).\end{aligned}$$
+      The first inequality replaces a max with an average. Then we swap the sums. The last step replaces an average with a min.</p>
+    <p><em>Step 2: unseen points.</em> Fix $j$. Let $v_1, \dots, v_p$ be the points of $C$ not in $S_j$. Then $p \ge m$.
+      For any $h$,
+      $$\begin{aligned}L_{\mathcal{D}_i}(h) &amp;= \frac{1}{2m}\sum_{x \in C}\mathbb{1}[h(x) \ne f_i(x)] \\ &amp;\ge \frac{1}{2p}\sum_{r=1}^{p}\mathbb{1}[h(v_r) \ne f_i(v_r)].\end{aligned}$$
+      The inequality drops the seen points and uses $p \ge m$.
+      Write $h_i = A(S_j^i)$. Then
+      $$\begin{aligned}\frac{1}{T}\sum_{i=1}^T L_{\mathcal{D}_i}(h_i) &amp;\ge \frac{1}{2p}\sum_{r=1}^{p} \frac{1}{T}\sum_{i=1}^T \mathbb{1}[h_i(v_r) \ne f_i(v_r)] \\ &amp;\ge \frac{1}{2}\min_r \frac{1}{T}\sum_{i=1}^T \mathbb{1}[h_i(v_r) \ne f_i(v_r)].\end{aligned}$$</p>
+    <p><em>Step 3: pairing.</em> Fix $r$. Split the $f_i$ into $T/2$ pairs $(f_i, f_{i'})$ that differ only at $v_r$.
+      The point $v_r$ is not in $S_j$, so $S_j^i = S_j^{i'}$ and $h_i = h_{i'}$. Exactly one of $f_i(v_r)$, $f_{i'}(v_r)$ disagrees with $h_i(v_r)$.
+      So the average over $i$ is exactly $\frac{1}{2}$.</p>
+    <p><em>Step 4: from expectation to probability.</em> Steps 1–3 give some $i$ with $\mathbb{E}[L_{\mathcal{D}_i}(A(S))] \ge \frac{1}{4}$.
+      Let $L = L_{\mathcal{D}_i}(A(S))$ and $q = \Pr[L \ge 1/8]$. Since $L \le 1$,
+      $$\tfrac{1}{4} \le \mathbb{E}[L] \le q \cdot 1 + (1 - q)\cdot\tfrac{1}{8}.$$
+      So $q \ge 1/7$. Take $\mathcal{D} = \mathcal{D}_i$ and $f$ any extension of $f_i$ to $\mathcal{X}$. $\blacksquare$</p>
+  </details>
 
-  <h2>Exercises</h2>
-  <div class="exercise">
-    <p><strong>5.1</strong> Use the Fundamental Theorem to show that convex polygons in $\mathbb{R}^2$ are not PAC learnable,
-      while axis-aligned rectangles are. Give a sample complexity bound for the latter.</p>
-    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  <div class="theorem" data-name="(Infinite VC dimension ⇒ not PAC learnable)">
+    If $\mathrm{VCdim}(\mathcal{H}) = \infty$, then $\mathcal{H}$ is not PAC learnable.
   </div>
-  <div class="exercise">
-    <p><strong>5.2</strong> In the No Free Lunch theorem, where does the proof use $m &lt; |C|/2$? What goes wrong if $m \ge |C|$?</p>
-    <details><summary>Solution</summary><p class="todo">TODO</p></details>
-  </div>
+  <details class="proof"><summary>Proof</summary>
+    <p>Suppose $A$ PAC learns $\mathcal{H}$. Set $\varepsilon = 1/9$, $\delta = 1/8$, and $m = m_{\mathcal{H}}(\varepsilon,\delta)$.
+      Some set $C$ of size $2m$ is shattered by $\mathcal{H}$. Run the No Free Lunch proof on $C$.
+      Each $f_i$ agrees on $C$ with some $h \in \mathcal{H}$, so each $\mathcal{D}_i$ is realizable by $\mathcal{H}$.</p>
+    <p>For the bad $\mathcal{D}_i$, $\Pr[L_{\mathcal{D}_i}(A(S)) \ge 1/8] \ge 1/7$.
+      The PAC guarantee gives $\Pr[L_{\mathcal{D}_i}(A(S)) \le 1/9] \ge 7/8$. These events are disjoint, and $1/7 + 7/8 &gt; 1$. Contradiction. $\blacksquare$</p>
+  </details>
+  <p>The same argument with a shattered set of size $d$ shows $m_{\mathcal{H}} \ge d/2$ for small constant $\varepsilon, \delta$.
+    The full lower bound $\Omega\big((d + \log(1/\delta))/\varepsilon\big)$ is due to Ehrenfeucht, Haussler, Kearns, and Valiant (1989).</p>
+
 </main>
 <script src="../js/nav.js"></script>
 </body>

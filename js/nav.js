@@ -52,6 +52,13 @@ function renderMath(el) {
     ).join("");
   body.prepend(header);
 
+  const footer = document.createElement("footer");
+  footer.className = "site";
+  footer.innerHTML =
+    'Probably Approximately Useful · A final project for 15-455 Undergraduate Complexity Theory, Carnegie Mellon University, Fall 2026 · ' +
+    'Dev Sharma';
+  body.append(footer);
+
   if (single) { loadAllChapters(header); return; }
 
   const i = CHAPTERS.findIndex((c) => c.file === page);

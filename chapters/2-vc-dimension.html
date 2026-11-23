@@ -13,71 +13,96 @@
 <main>
   <h1>2. Shattering &amp; VC Dimension</h1>
 
-  <div class="todo todo-main">
-    <p class="todo-title">To do: Chapter 2</p>
-    <p><strong>Write</strong></p>
-    <ul>
-      <li>Intuition for restriction and shattering, ideally with a small picture.</li>
-      <li>Suggested experiments for the shattering game ("find 4 points rectangles shatter; now try 5").</li>
-      <li>All five worked examples: thresholds, intervals, rectangles, halfplanes (Radon's theorem), convex polygons.</li>
-      <li>The "VC dimension ≠ number of parameters" remark ($\sin$ example).</li>
-      <li>Solutions to Exercises 2.1–2.3.</li>
-    </ul>
-    <p><strong>Proof-check</strong></p>
-    <ul>
-      <li>Each example's VC dimension, both directions (some set of size $d$ shattered; no set of size $d+1$).</li>
-      <li>Halfspaces in $\mathbb{R}^d$ have VC dimension $d+1$ (non-homogeneous).</li>
-      <li>The $\sin$ example's claim of infinite VC dimension (see SSBD Ch. 6).</li>
-    </ul>
-    <p><strong>Test &amp; polish</strong></p>
-    <ul>
-      <li>Shattering game on a phone: tapping to add/remove points, 128-thumbnail grid at 7 points.</li>
-    </ul>
-  </div>
 
-
-  <p>Instead of counting hypotheses, count how many <em>different behaviors</em> $\mathcal{H}$ can show on a finite set of points.</p>
+  <p>A learner only sees finitely many points. So what matters is how many ways $\mathcal{H}$ can label a finite set, not how many hypotheses it has.</p>
 
   <div class="definition" data-name="(Restriction)">
     For $C = \{c_1,\dots,c_m\} \subseteq \mathcal{X}$, the restriction of $\mathcal{H}$ to $C$ is
     $\mathcal{H}_C = \{ (h(c_1),\dots,h(c_m)) : h \in \mathcal{H} \} \subseteq \{0,1\}^m$.
   </div>
-  <div class="definition" data-name="(Shattering)">
-    $\mathcal{H}$ <em>shatters</em> $C$ if $|\mathcal{H}_C| = 2^{|C|}$, meaning every labeling of $C$ is achieved by some $h \in \mathcal{H}$.
-  </div>
-  <div class="definition" data-name="(VC dimension)">
-    $\mathrm{VCdim}(\mathcal{H})$ is the size of the largest set shattered by $\mathcal{H}$, or $\infty$ if $\mathcal{H}$ shatters arbitrarily large sets.
-  </div>
-  <p>To show $\mathrm{VCdim}(\mathcal{H}) = d$, you must show both:
-    (1) <em>some</em> set of size $d$ is shattered, and (2) <em>no</em> set of size $d+1$ is shattered.</p>
+  <p>Example: thresholds on $C = \{1, 2, 3\}$ give $\mathcal{H}_C = \{000, 001, 011, 111\}$.
+    That is 4 labelings out of 8.</p>
 
-  <h2>Try it: the shattering game</h2>
-  <p>Place points and pick a class. The widget checks all $2^n$ labelings. Can you find the largest set each class shatters?
-    Can you convince yourself that no larger set works?</p>
+  <div class="definition" data-name="(Shattering)">
+    $\mathcal{H}$ <em>shatters</em> $C$ if $|\mathcal{H}_C| = 2^{|C|}$. That is, every labeling of $C$ is achieved by some $h \in \mathcal{H}$.
+  </div>
+  <p>If $\mathcal{H}$ shatters $C$, labels on part of $C$ say nothing about labels on the rest. Chapter 5 turns this into a lower bound.</p>
+
+  <div class="definition" data-name="(VC dimension)">
+    $\mathrm{VCdim}(\mathcal{H})$ is the size of the largest set shattered by $\mathcal{H}$. If $\mathcal{H}$ shatters sets of every size, $\mathrm{VCdim}(\mathcal{H}) = \infty$.
+  </div>
+  <p>To show $\mathrm{VCdim}(\mathcal{H}) = d$, prove two things:</p>
+  <ol>
+    <li><em>Some</em> set of size $d$ is shattered.</li>
+    <li><em>No</em> set of size $d+1$ is shattered.</li>
+  </ol>
+
+  <h2>The shattering game</h2>
+  <p>Place points and pick a class. The widget checks all $2^n$ labelings.</p>
+  <ul>
+    <li>Find 4 points that rectangles shatter. Then add a fifth.</li>
+    <li>Find 3 points that halfplanes shatter. Why do 4 points always fail?</li>
+    <li>Place 7 points on a circle and select convex polygons.</li>
+  </ul>
   <div class="widget" data-widget="shattering"></div>
 
   <h2>Examples</h2>
-  <div class="example" data-name="(Thresholds)"><p class="todo">TODO: VCdim = 1. Any point is shattered; for $x_1 &lt; x_2$ the labeling $(1,0)$ is impossible.</p></div>
-  <div class="example" data-name="(Intervals)"><p class="todo">TODO: VCdim = 2; the labeling $(1,0,1)$ is impossible.</p></div>
-  <div class="example" data-name="(Axis-aligned rectangles)"><p class="todo">TODO: VCdim = 4 using a "diamond"; for 5 points, label the extreme points positive and the rest negative.</p></div>
-  <div class="example" data-name="(Halfplanes)"><p class="todo">TODO: VCdim = 3; Radon's theorem in general ($d+1$ in $\mathbb{R}^d$).</p></div>
-  <div class="example" data-name="(Convex polygons)"><p class="todo">TODO: VCdim = ∞, using points on a circle. Try it in the widget!</p></div>
+  <p>Each class below is described by a few real parameters. Thresholds have one parameter, $t$. Intervals have two, $a$ and $b$.
+    Halfplanes have three: $w_1$, $w_2$, and $b$. Rectangles have four. In each case the VC dimension equals the number of parameters.
+    This suggests that VC dimension counts the degrees of freedom of a class.
+    Convex polygons have no bound on their number of vertices, and their VC dimension is infinite.
+    The last example shows that the parameter count can still be misleading.</p>
 
-  <p class="todo">TODO: warn that VC dimension ≠ number of parameters (for example, $\{x \mapsto \mathbb{1}[\sin(\theta x) &gt; 0]\}$ has one parameter but infinite VC dimension).</p>
+  <div class="example" data-result="Thresholds have VC dimension 1">
+    $\mathcal{H} = \{x \mapsto \mathbb{1}[x \ge t] : t \in \mathbb{R}\}$.
+  </div>
+  <details class="proof"><summary>Proof</summary>
+    <p><em>Shattered:</em> $\{0\}$. Use $t = -1$ for label 1 and $t = 1$ for label 0.</p>
+    <p><em>Not shattered:</em> take $x_1 &lt; x_2$. If $h_t(x_1) = 1$ then $x_2 &gt; x_1 \ge t$, so $h_t(x_2) = 1$. The labeling $(1, 0)$ is impossible. $\blacksquare$</p>
+  </details>
 
-  <h2>Exercises</h2>
-  <div class="exercise">
-    <p><strong>2.1</strong> Prove that the VC dimension of intervals on $\mathbb{R}$ is exactly 2.</p>
-    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  <div class="example" data-result="Intervals have VC dimension 2">
+    $\mathcal{H} = \{x \mapsto \mathbb{1}[a \le x \le b] : a, b \in \mathbb{R}\}$.
   </div>
-  <div class="exercise">
-    <p><strong>2.2</strong> Prove that the VC dimension of axis-aligned rectangles in $\mathbb{R}^2$ is exactly 4.</p>
-    <details><summary>Solution</summary><p class="todo">TODO</p></details>
+  <details class="proof"><summary>Proof</summary>
+    <p><em>Shattered:</em> $\{1, 2\}$. Use $[1,1]$, $[2,2]$, $[1,2]$, and $[5,5]$.</p>
+    <p><em>Not shattered:</em> take $x_1 &lt; x_2 &lt; x_3$. An interval that contains $x_1$ and $x_3$ contains $x_2$. The labeling $(1, 0, 1)$ is impossible. $\blacksquare$</p>
+  </details>
+
+  <div class="example" data-result="Halfplanes have VC dimension 3">
+    <p>$\mathcal{H} = \{x \mapsto \mathbb{1}[\langle w, x\rangle \ge b] : w \in \mathbb{R}^2, b \in \mathbb{R}\}$.</p>
+    <p>More generally, halfspaces in $\mathbb{R}^d$ have VC dimension $d+1$.</p>
   </div>
-  <div class="exercise">
-    <p><strong>2.3</strong> Show that if $\mathcal{H}$ is finite then $\mathrm{VCdim}(\mathcal{H}) \le \log_2|\mathcal{H}|$.</p>
-    <details><summary>Solution</summary><p class="todo">TODO: shattering $d$ points requires $2^d$ distinct hypotheses.</p></details>
+
+  <div class="example" data-result="Axis-aligned rectangles have VC dimension 4">
+    $\mathcal{H}$ is the set of indicators of rectangles $[a_1, b_1] \times [a_2, b_2]$ in $\mathbb{R}^2$.
   </div>
+  <details class="proof"><summary>Proof</summary>
+    <p><em>Shattered:</em> the diamond $\{(0,1), (0,-1), (1,0), (-1,0)\}$. For a subset $T$, use the bounding box of $T$.
+      The box contains no other diamond point. For $T = \emptyset$, use an empty rectangle ($a_1 &gt; b_1$).</p>
+    <p><em>Not shattered:</em> take any 5 points. Pick a leftmost, rightmost, topmost, and bottommost point.
+      That is at most 4 points, so some point $p$ is left over.
+      Label the chosen points 1 and $p$ label 0. Any rectangle containing the chosen points contains their bounding box.
+      That box contains $p$. So this labeling is impossible. $\blacksquare$</p>
+  </details>
+
+  <div class="example" data-result="Convex polygons have infinite VC dimension">
+    $\mathcal{H}$ is the set of indicators of convex polygons in $\mathbb{R}^2$.
+  </div>
+
+  <h2>VC dimension is not the number of parameters</h2>
+  <div class="example" data-result="A one-parameter class with infinite VC dimension">
+    $\mathcal{H} = \{x \mapsto \mathbb{1}[\sin(\theta x) &gt; 0] : \theta \in \mathbb{R}\}$ on $\mathcal{X} = \mathbb{R}$ has VC dimension $\infty$.
+  </div>
+  <details class="proof"><summary>Proof</summary>
+    <p>Take $x_i = 2^{-i}$ for $i = 1, \dots, m$ and any labels $y_1, \dots, y_m$. Set
+      $$\theta = \pi\Big(1 + \sum_{j=1}^{m} (1 - y_j)\, 2^j\Big).$$
+      Write $\theta x_i = \pi u_i$ with $u_i = 2^{-i}\big(1 + \sum_j (1-y_j) 2^j\big)$.
+      The integer part of $u_i$ is $\sum_{j \ge i} (1-y_j) 2^{j-i}$. Its parity is $1 - y_i$.
+      The fractional part is $2^{-i}\big(1 + \sum_{j &lt; i}(1-y_j)2^j\big)$, which lies strictly between 0 and 1.
+      So $\sin(\pi u_i) &gt; 0$ exactly when the integer part is even, that is, when $y_i = 1$. $\blacksquare$</p>
+  </details>
+
 </main>
 <script src="../js/nav.js"></script>
 <script src="../js/shattering.js"></script>
