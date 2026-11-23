@@ -238,5 +238,8 @@ details.proof[open] > summary { margin-bottom: 0.4rem; }
 @media (max-width: 640px) { .corollary { padding: 0.5rem 0.7rem; } }
 
 /* Example boxes titled by their result: <div class="example" data-result="…"> */
-.example[data-result]::before { content: attr(data-result); }
+.example[data-result]::before { content: "Example: " attr(data-result); }
 .example + details.proof { margin-top: -0.6rem; }
+
+/* Linked theorem boxes clear the sticky header */
+.definition[id], .theorem[id], .lemma[id] { scroll-margin-top: 4.5rem; }

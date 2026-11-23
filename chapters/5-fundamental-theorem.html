@@ -12,10 +12,11 @@
 <body data-page="5-fundamental-theorem.html" data-root="../">
 <main>
   <h1>5. The Fundamental Theorem of PAC Learning</h1>
+  <p>Chapters 2–4 proved one direction: finite VC dimension implies learnability. This chapter proves the other direction and states the full theorem. It also gives the sample complexity, which depends on $\mathcal{H}$ only through its VC dimension.</p>
 
 
   <div class="theorem" data-name="(Fundamental Theorem, qualitative)">
-    For a class $\mathcal{H}$ of functions $\mathcal{X} \to \{0,1\}$ with 0-1 loss, the following are equivalent:
+    For a class $\mathcal{H}$ of functions $\mathcal{X} \to \{0,1\}$, the following are equivalent:
     <ol>
       <li>$\mathcal{H}$ has the uniform convergence property.</li>
       <li>Any ERM rule is a successful agnostic PAC learner for $\mathcal{H}$.</li>
@@ -32,9 +33,14 @@
     In the agnostic case,
     $$\begin{aligned}m_{\mathcal{H}}(\varepsilon,\delta) &amp;\ge C_1 \frac{d + \log(1/\delta)}{\varepsilon^2}, \\ m_{\mathcal{H}}(\varepsilon,\delta) &amp;\le C_2 \frac{d + \log(1/\delta)}{\varepsilon^2}.\end{aligned}$$
   </div>
-  <p>The sample complexity depends on $\mathcal{H}$ only through $d$. Noise costs a factor of about $1/\varepsilon$.</p>
+  <p>There are a few points to note about these presented bounds. In both settings (realizable and agnostic), the sample size grows linearly in $d$. Doubling the VC dimension roughly doubles the number of samples needed. The dependence on $\delta$ and $\varepsilon$ tells us something about confidence and accuracy. Specifically:</p>
+  <ul>
+    <li><strong>Confidence is cheap.</strong> The dependence of $m$ on $\delta$ is only $\log(1/\delta)$. In the model, to make failure 10 times less likely, you would only need to add about $\log 10/\varepsilon$ samples in the realizable case, not 10 times as many.</li>
+    <li><strong>Accuracy is expensive.</strong> On the other hand, the sample size grows like $1/\varepsilon$ in the realizable case and like $1/\varepsilon^2$ in the agnostic case. Halving $\varepsilon$ roughly doubles the sample size in the first case and quadruples it in the second.</li>
+  </ul>
+  <p>This also characterizes what it means to go from realizable to agnostic. Dropping realizability costs a factor of about $1/\varepsilon$ to get the same accuracy for a model.</p>
   <h2>Roadmap</h2>
-  <p>The proof is a cycle of implications. Each arrow is either a result from an earlier chapter or immediate from the definitions.</p>
+  <p>The proof is a cycle of implications between the six statements. The lists below give the status and source of each step.</p>
   <figure class="figure">
     <svg viewBox="0 0 360 400" role="img" aria-label="Implications: 6 to 1 to 2 to 3 to 4, 2 to 5 to 4, and 4 back to 6 by No Free Lunch">
       <defs>
@@ -73,12 +79,22 @@
       </g>
     </svg>
   </figure>
+
+  <h3>Status: the qualitative theorem</h3>
   <ul>
-    <li><strong>6 ⇒ 1:</strong> Sauer–Shelah plus the VC inequality (Chapters 3–4).</li>
-    <li><strong>1 ⇒ 2:</strong> the "Representative ⇒ ERM succeeds" lemma (Chapter 4).</li>
-    <li><strong>2 ⇒ 3</strong> and <strong>5 ⇒ 4:</strong> by definition.</li>
-    <li><strong>3 ⇒ 4</strong> and <strong>2 ⇒ 5:</strong> under realizability, $\min_h L_{\mathcal{D}}(h) = 0$. So an agnostic guarantee is a realizable guarantee.</li>
-    <li><strong>4 ⇒ 6:</strong> No Free Lunch (below).</li>
+    <li><strong>1 ⇒ 2.</strong> <em>Proved.</em> The <a href="4-uniform-convergence.html#representative-erm">Representative ⇒ ERM succeeds</a> lemma (Chapter 4).</li>
+    <li><strong>2 ⇒ 3 and 5 ⇒ 4.</strong> <em>Proved.</em> By the definitions of <a href="4-uniform-convergence.html#agnostic-pac">agnostic PAC</a> and <a href="1-pac.html#pac-learnability">PAC</a> learnability.</li>
+    <li><strong>3 ⇒ 4 and 2 ⇒ 5.</strong> <em>Proved.</em> Under realizability, $\min_h L_{\mathcal{D}}(h) = 0$. So an agnostic guarantee is a realizable guarantee.</li>
+    <li><strong>6 ⇒ 1.</strong> <em>Cited.</em> <a href="4-uniform-convergence.html#finite-vc-uc">Finite VC dimension ⇒ uniform convergence</a> (Chapter 4). It combines the <a href="3-sauer-shelah.html#sauer-shelah">Sauer–Shelah lemma</a>, proved in Chapter 3, with the <a href="4-uniform-convergence.html#vc-inequality">VC inequality</a>, which is cited.</li>
+    <li><strong>4 ⇒ 6.</strong> <em>Proved below.</em> The <a href="5-fundamental-theorem.html#no-free-lunch">No Free Lunch theorem</a> and its <a href="5-fundamental-theorem.html#infinite-vc">corollary</a>, proved in this chapter.</li>
+  </ul>
+
+  <h3>Status: the quantitative theorem</h3>
+  <ul>
+    <li><strong>Realizable upper bound.</strong> <em>Cited.</em> The <a href="5-fundamental-theorem.html#realizable-bound">realizable-case bound</a> of Blumer et al. (1989), stated below without proof, plus Sauer–Shelah.</li>
+    <li><strong>Realizable lower bound.</strong> <em>Cited.</em> Ehrenfeucht, Haussler, Kearns, and Valiant (1989). The No Free Lunch argument below gives the weaker bound $m_{\mathcal{H}} \ge d/2$.</li>
+    <li><strong>Agnostic upper bound.</strong> <em>Cited.</em> <a href="4-uniform-convergence.html#finite-vc-uc">Chapter 4</a> proves it with an extra $\log(1/\varepsilon)$ factor, using the cited VC inequality. Removing the factor (chaining) is cited.</li>
+    <li><strong>Agnostic lower bound.</strong> <em>Cited.</em> Shalev-Shwartz and Ben-David (2014), Chapter 28.</li>
   </ul>
 
   <h2>Sufficiency: finite VC ⇒ learnable</h2>
@@ -87,15 +103,16 @@
     So ERM is an agnostic PAC learner with $m_{\mathcal{H}}(\varepsilon,\delta) \le m^{UC}_{\mathcal{H}}(\varepsilon/2,\delta)$.</p>
   <p>In the realizable case we can do better. ERM outputs a consistent $h$. We only need that no bad $h$ is consistent.
     The argument behind the VC inequality in Chapter 4 adapts to this event:</p>
-  <div class="theorem" data-name="(Realizable case; Blumer et al. 1989)">
+  <div id="realizable-bound" class="theorem" data-name="(Realizable case; Blumer et al. 1989)">
     For $m \ge 8/\varepsilon$,
-    $$\begin{aligned}&amp;\Pr_{S \sim \mathcal{D}^m}\big[\exists h \in \mathcal{H} : L_S(h) = 0 \text{ and } L_{\mathcal{D}}(h) &gt; \varepsilon\big] \\ &amp;\qquad\le 2\,\tau_{\mathcal{H}}(2m)\, 2^{-\varepsilon m/2}.\end{aligned}$$
+    $$\begin{aligned}&amp;\Pr_{S \sim \mathcal{D}^m}\big[\exists h \in \mathcal{H} : L_S(h) = 0 \\ &amp;\qquad\qquad\text{and } L_{\mathcal{D}}(h) &gt; \varepsilon\big] \\ &amp;\qquad\le 2\,\tau_{\mathcal{H}}(2m)\, 2^{-\varepsilon m/2}.\end{aligned}$$
   </div>
   <p>With Sauer–Shelah, this is at most $\delta$ for $m = O\big((d\log(1/\varepsilon) + \log(1/\delta))/\varepsilon\big)$.
     This matches the upper bound in the quantitative theorem.</p>
 
   <h2>Necessity: infinite VC ⇒ not learnable</h2>
-  <div class="theorem" data-name="(No Free Lunch)">
+  <p>No single learner succeeds on every task. For any learner and any sample size smaller than half the domain, some distribution with a perfect labeling makes the learner fail with constant probability.</p>
+  <div id="no-free-lunch" class="theorem" data-name="(No Free Lunch)">
     Let $A$ be any learner for binary classification over $\mathcal{X}$, and let $m &lt; |\mathcal{X}|/2$. Then there exist a distribution $\mathcal{D}$
     and a function $f : \mathcal{X} \to \{0,1\}$ with $L_{\mathcal{D}}(f) = 0$ such that
     $\Pr_{S \sim \mathcal{D}^m}\big[L_{\mathcal{D}}(A(S)) \ge 1/8\big] \ge 1/7$.
@@ -114,7 +131,7 @@
       $$\begin{aligned}L_{\mathcal{D}_i}(h) &amp;= \frac{1}{2m}\sum_{x \in C}\mathbb{1}[h(x) \ne f_i(x)] \\ &amp;\ge \frac{1}{2p}\sum_{r=1}^{p}\mathbb{1}[h(v_r) \ne f_i(v_r)].\end{aligned}$$
       The inequality drops the seen points and uses $p \ge m$.
       Write $h_i = A(S_j^i)$. Then
-      $$\begin{aligned}\frac{1}{T}\sum_{i=1}^T L_{\mathcal{D}_i}(h_i) &amp;\ge \frac{1}{2p}\sum_{r=1}^{p} \frac{1}{T}\sum_{i=1}^T \mathbb{1}[h_i(v_r) \ne f_i(v_r)] \\ &amp;\ge \frac{1}{2}\min_r \frac{1}{T}\sum_{i=1}^T \mathbb{1}[h_i(v_r) \ne f_i(v_r)].\end{aligned}$$</p>
+      $$\begin{aligned}&amp;\frac{1}{T}\sum_{i=1}^T L_{\mathcal{D}_i}(h_i) \\ &amp;\quad\ge \frac{1}{2p}\sum_{r=1}^{p} \frac{1}{T}\sum_{i=1}^T \mathbb{1}[h_i(v_r) \ne f_i(v_r)] \\ &amp;\quad\ge \frac{1}{2}\min_r \frac{1}{T}\sum_{i=1}^T \mathbb{1}[h_i(v_r) \ne f_i(v_r)].\end{aligned}$$</p>
     <p><em>Step 3: pairing.</em> Fix $r$. Split the $f_i$ into $T/2$ pairs $(f_i, f_{i'})$ that differ only at $v_r$.
       The point $v_r$ is not in $S_j$, so $S_j^i = S_j^{i'}$ and $h_i = h_{i'}$. Exactly one of $f_i(v_r)$, $f_{i'}(v_r)$ disagrees with $h_i(v_r)$.
       So the average over $i$ is exactly $\frac{1}{2}$.</p>
@@ -124,7 +141,7 @@
       So $q \ge 1/7$. Take $\mathcal{D} = \mathcal{D}_i$ and $f$ any extension of $f_i$ to $\mathcal{X}$. $\blacksquare$</p>
   </details>
 
-  <div class="theorem" data-name="(Infinite VC dimension ⇒ not PAC learnable)">
+  <div id="infinite-vc" class="theorem" data-name="(Infinite VC dimension ⇒ not PAC learnable)">
     If $\mathrm{VCdim}(\mathcal{H}) = \infty$, then $\mathcal{H}$ is not PAC learnable.
   </div>
   <details class="proof"><summary>Proof</summary>

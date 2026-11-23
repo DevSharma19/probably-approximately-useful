@@ -36,6 +36,15 @@ function renderMath(el) {
   else window.addEventListener("load", go, { once: true });
 }
 
+// Links like "4-uniform-convergence.html#vc-inequality" in chapter content point at a box
+// in another chapter page. Where that box is on the current page, use a plain "#id" link.
+function localizeLinks(root, onPage) {
+  root.querySelectorAll('a[href*=".html#"]').forEach((a) => {
+    const m = a.getAttribute("href").match(/^([\w-]+\.html)#(.+)$/);
+    if (m && onPage(m[1])) a.setAttribute("href", "#" + m[2]);
+  });
+}
+
 (function buildNav() {
   const body = document.body;
   const page = body.dataset.page;
@@ -63,6 +72,7 @@ function renderMath(el) {
 
   const i = CHAPTERS.findIndex((c) => c.file === page);
   if (i === -1) return;
+  localizeLinks(document.querySelector("main"), (file) => file === page);
   const prev = i > 0 ? CHAPTERS[i - 1] : null;
   const next = i < CHAPTERS.length - 1 ? CHAPTERS[i + 1] : null;
   const pager = document.createElement("nav");
@@ -95,6 +105,9 @@ async function loadAllChapters(header) {
     section.append(...doc.querySelector("main").childNodes);
     container.append(section);
   });
+  // Cross-chapter links now point into this page.
+  localizeLinks(container, (file) => CHAPTERS.some((c) => c.file === file));
+
   // Point the chapter list at the in-page sections.
   document.querySelectorAll('#toc a[href^="chapters/"]').forEach((a) => {
     const i = CHAPTERS.findIndex((c) => "chapters/" + c.file === a.getAttribute("href"));

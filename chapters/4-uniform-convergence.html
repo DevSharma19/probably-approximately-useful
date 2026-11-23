@@ -17,7 +17,7 @@
   <h2>Dropping realizability</h2>
   <p>Now, we will remove the realizability assumption. No hypothesis in $\mathcal{H}$ may be perfect. We can no longer ask for error $\le \varepsilon$. Instead, we ask to be nearly as good as the best hypothesis in the class.</p>
 
-  <div class="definition" data-name="(Agnostic PAC learnability)">
+  <div id="agnostic-pac" class="definition" data-name="(Agnostic PAC learnability)">
     $\mathcal{H}$ is <em>agnostic PAC learnable</em> if there exist $m_{\mathcal{H}} : (0,1)^2 \to \mathbb{N}$ and an algorithm $A$ such that for every
     $\varepsilon, \delta \in (0,1)$ and <em>every</em> distribution $\mathcal{D}$ over $\mathcal{X} \times \{0,1\}$: given $m \ge m_{\mathcal{H}}(\varepsilon,\delta)$
     i.i.d. examples from $\mathcal{D}$, $A$ outputs $h$ with
@@ -37,7 +37,7 @@
     a sample of size $m \ge m^{UC}_{\mathcal{H}}(\varepsilon,\delta)$ is $\varepsilon$-representative with probability at least $1-\delta$.
   </div>
 
-  <div class="lemma" data-name="(Representative ⇒ ERM succeeds)">
+  <div id="representative-erm" class="lemma" data-name="(Representative ⇒ ERM succeeds)">
     If $S$ is $\tfrac{\varepsilon}{2}$-representative, then any ERM output $h_S$ satisfies $L_{\mathcal{D}}(h_S) \le \min_{h\in\mathcal{H}} L_{\mathcal{D}}(h) + \varepsilon$.
   </div>
   <details class="proof"><summary>Proof</summary>
@@ -74,7 +74,7 @@
     So on a sample of size $m$, $\mathcal{H}$ shows at most $\tau_{\mathcal{H}}(m)$ distinct behaviors.
     Let $d = \mathrm{VCdim}(\mathcal{H})$. By Sauer–Shelah, that is at most $(em/d)^d$ once $m \ge d$. We would like to replace $|\mathcal{H}|$ in the union bound with this number.</p>
 
-  <div class="theorem" data-name="(VC inequality)">
+  <div id="vc-inequality" class="theorem" data-name="(VC inequality)">
     For every $\mathcal{H}$, every $\mathcal{D}$, and every $m$ with $m\varepsilon^2 \ge 2$,
     $$\begin{aligned}&amp;\Pr_{S \sim \mathcal{D}^m}\Big[\exists h \in \mathcal{H} : |L_S(h) - L_{\mathcal{D}}(h)| &gt; \varepsilon\Big] \\ &amp;\qquad\le 4\,\tau_{\mathcal{H}}(2m)\, e^{-m\varepsilon^2/8}.\end{aligned}$$
   </div>
@@ -85,7 +85,7 @@
     The constants are worse. But the size of the class, $|\mathcal{H}|$, is replaced by the number of behaviors on $2m$ points.
     When $d$ is finite, that number is polynomial in $m$, and the exponential term wins.</p>
 
-  <div class="theorem" data-name="(Finite VC dimension ⇒ uniform convergence)">
+  <div id="finite-vc-uc" class="theorem" data-name="(Finite VC dimension ⇒ uniform convergence)">
     If $\mathrm{VCdim}(\mathcal{H}) = d &lt; \infty$, then $\mathcal{H}$ has the uniform convergence property with
     $$m^{UC}_{\mathcal{H}}(\varepsilon,\delta) = O\!\left(\frac{d\log(1/\varepsilon) + \log(1/\delta)}{\varepsilon^2}\right).$$
   </div>

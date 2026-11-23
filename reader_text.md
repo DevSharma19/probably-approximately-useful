@@ -210,17 +210,18 @@ The other half is *necessity*: if the VC dimension is infinite, no learner succe
 
 # 5. The Fundamental Theorem of PAC Learning
 
-The sample complexity depends on $\mathcal{H}$ only through $d$. Noise costs a factor of about $1/\varepsilon$.
+Chapters 2–4 proved one direction: finite VC dimension implies learnability. This chapter proves the other direction and states the full theorem. It also gives the sample complexity, which depends on $\mathcal{H}$ only through its VC dimension.
+
+There are a few points to note about these presented bounds. In both settings (realizable and agnostic), the sample size grows linearly in $d$. Doubling the VC dimension roughly doubles the number of samples needed. The dependence on $\delta$ and $\varepsilon$ tells us something about confidence and accuracy. Specifically:
+
+- **Confidence is cheap.** The dependence of $m$ on $\delta$ is only $\log(1/\delta)$. In the model, to make failure 10 times less likely, you would only need to add about $\log 10/\varepsilon$ samples in the realizable case, not 10 times as many.
+- **Accuracy is expensive.** On the other hand, the sample size grows like $1/\varepsilon$ in the realizable case and like $1/\varepsilon^2$ in the agnostic case. Halving $\varepsilon$ roughly doubles the sample size in the first case and quadruples it in the second.
+
+This also characterizes what it means to go from realizable to agnostic. Dropping realizability costs a factor of about $1/\varepsilon$ to get the same accuracy for a model.
 
 ## Roadmap
 
-The proof is a cycle of implications. Each arrow is either a result from an earlier chapter or immediate from the definitions.
-
-- **6 ⇒ 1:** Sauer–Shelah plus the VC inequality (Chapters 3–4).
-- **1 ⇒ 2:** the "Representative ⇒ ERM succeeds" lemma (Chapter 4).
-- **2 ⇒ 3** and **5 ⇒ 4:** by definition.
-- **3 ⇒ 4** and **2 ⇒ 5:** under realizability, $\min_h L_{\mathcal{D}}(h) = 0$. So an agnostic guarantee is a realizable guarantee.
-- **4 ⇒ 6:** No Free Lunch (below).
+The proof is a cycle of implications between the six statements. The lists below give the status and source of each step.
 
 ## Sufficiency: finite VC ⇒ learnable
 
@@ -231,6 +232,8 @@ In the realizable case we can do better. ERM outputs a consistent $h$. We only n
 With Sauer–Shelah, this is at most $\delta$ for $m = O\big((d\log(1/\varepsilon) + \log(1/\delta))/\varepsilon\big)$. This matches the upper bound in the quantitative theorem.
 
 ## Necessity: infinite VC ⇒ not learnable
+
+No single learner succeeds on every task. For any learner and any sample size smaller than half the domain, some distribution with a perfect labeling makes the learner fail with constant probability.
 
 Idea: put $\mathcal{D}$ on a set $C$ of $2m$ points. The sample misses at least half of $C$. On the missed points, the labels can be anything. The learner has no information about them.
 
@@ -246,15 +249,23 @@ The Fundamental Theorem counts *samples*, not *time*. It says when a learner can
 
 To talk about running time, the domain needs a size. Let $\mathcal{X}_n = \{0,1\}^n$ and let $\mathcal{H}_n$ be a class over $\mathcal{X}_n$. Each $h \in \mathcal{H}_n$ has a description of size $\mathrm{size}(h)$, such as the length of a formula.
 
-Under realizability, ERM must solve the consistency problem. So the complexity of ERM is the complexity of this search problem.
+Chapter 5 shows that ERM is a PAC learner whenever the VC dimension is finite. So for these classes, the number of samples is not the obstacle. What remains is computation: given the sample, find a hypothesis in $\mathcal{H}_n$ that fits it. This task has no distribution and no $\varepsilon$ or $\delta$. It is an ordinary computational problem, so we can ask where it sits among P, NP, and RP.
+
+Under realizability, ERM must solve the search version of the consistency problem: find a consistent $h$. So the complexity of ERM is the complexity of this problem.
+
+If hypotheses have polynomial-size descriptions that can be evaluated in polynomial time, the consistency problem is in NP. A consistent $h$ is the certificate. An efficient algorithm for the search version gives an efficient proper learner, as long as $\mathrm{VCdim}(\mathcal{H}_n)$ is polynomial in $n$: draw polynomially many samples and return a consistent $h$. The Pitt–Valiant theorem below gives a converse. So the consistency problem is the link between learning and the complexity classes from this course.
+
+Here is the idea behind the Pitt–Valiant theorem. Given a sample $S$, run the learner on the uniform distribution over $S$ with $\varepsilon < 1/|S|$. Any hypothesis with error below $1/|S|$ makes no mistakes on $S$. So check whether the output is consistent with $S$. If no consistent $h$ exists, the check always fails. If one exists, the check succeeds with probability at least $1-\delta$.
 
 ### Hardness for every output format
 
 Some classes are hard to learn even improperly. Then the hardness rests on assumptions from cryptography or average-case complexity, not on $\mathrm{P} \ne \mathrm{NP}$ alone. The common idea: if a class can compute pseudorandom functions, an efficient learner would distinguish them from random functions.
 
 - **Kearns and Valiant (1994).** Assuming problems such as breaking RSA are hard, Boolean formulas, deterministic finite automata, and constant-depth threshold circuits are not efficiently PAC learnable.
-- **Klivans and Sherstov (2009).** A polynomial-time learner for intersections of $n^{\varepsilon}$ halfspaces would solve certain approximate lattice problems in the worst case. The reduction uses Regev's lattice-based cryptosystems.
-- **Daniely and Shalev-Shwartz (2016).** Assuming that refuting random $K$-SAT formulas is hard, DNF formulas with $\omega(\log n)$ terms are not efficiently learnable. It was one of the first hardness-of-learning results based on an assumption other than cryptography.
+- **Klivans and Sherstov (2009).** A polynomial-time learner for intersections of $n^{c}$ halfspaces, for any constant $c > 0$, would solve certain approximate lattice problems in the worst case. The reduction uses Regev's lattice-based cryptosystems.
+- **Daniely and Shalev-Shwartz (2016).** Assuming that refuting random $k$-SAT formulas is hard, DNF formulas with $\omega(\log n)$ terms are not efficiently learnable. It was one of the first hardness-of-learning results based on an assumption other than cryptography.
+
+These results separate two questions. The Fundamental Theorem says how many samples a learner needs. Complexity theory asks whether a learner can use them in polynomial time. The answer can be no, even when few samples suffice.
 
 ## References
 

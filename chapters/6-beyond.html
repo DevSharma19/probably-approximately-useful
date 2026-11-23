@@ -29,15 +29,18 @@
   <div class="definition" data-name="(Proper and improper learning)">
     $A$ is <em>proper</em> if it always outputs some $h \in \mathcal{H}_n$. Otherwise it is <em>improper</em>: it may output a hypothesis from a larger class.
   </div>
+  <p>Chapter 5 shows that ERM is a PAC learner whenever the VC dimension is finite. So for these classes, the number of samples is not the obstacle. What remains is computation: given the sample, find a hypothesis in $\mathcal{H}_n$ that fits it. This task has no distribution and no $\varepsilon$ or $\delta$. It is an ordinary computational problem, so we can ask where it sits among P, NP, and RP.</p>
   <div class="definition" data-name="(Consistency problem)">
     Given a labeled sample $S$ over $\mathcal{X}_n$, decide whether some $h \in \mathcal{H}_n$ is consistent with $S$.
   </div>
-  <p>Under realizability, ERM must solve the consistency problem. So the complexity of ERM is the complexity of this search problem.</p>
+  <p>Under realizability, ERM must solve the search version of the consistency problem: find a consistent $h$. So the complexity of ERM is the complexity of this problem.</p>
+  <p>If hypotheses have polynomial-size descriptions that can be evaluated in polynomial time, the consistency problem is in NP. A consistent $h$ is the certificate. An efficient algorithm for the search version gives an efficient proper learner, as long as $\mathrm{VCdim}(\mathcal{H}_n)$ is polynomial in $n$: draw polynomially many samples and return a consistent $h$. The Pitt–Valiant theorem below gives a converse. So the consistency problem is the link between learning and the complexity classes from this course.</p>
 
   <div class="example" data-result="Conjunctions are efficiently and properly learnable">
     <p>Let $\mathcal{H}_n$ be conjunctions of literals over $x_1, \dots, x_n$, such as $x_1 \wedge \neg x_3$.
       The <em>elimination algorithm</em> starts with all $2n$ literals. For each positive example, it deletes every literal the example falsifies.
-      It outputs the conjunction of what remains. It runs in time $O(nm)$. Under realizability, its output is consistent with the sample.</p>
+      It outputs the conjunction of what remains. It runs in time $O(nm)$. Under realizability, its output is consistent with the sample.
+      Since $|\mathcal{H}_n| \le 3^n + 1$, Chapter 1 shows that $O\big((n + \log(1/\delta))/\varepsilon\big)$ samples suffice.</p>
   </div>
 
   <div class="theorem" data-name="(Pitt–Valiant 1988)">
@@ -45,13 +48,15 @@
     So if the consistency problem is NP-hard, proper efficient learning of $\mathcal{H}$ implies $\mathrm{NP} = \mathrm{RP}$.
   </div>
 
+  <p>Here is the idea behind the Pitt–Valiant theorem. Given a sample $S$, run the learner on the uniform distribution over $S$ with $\varepsilon &lt; 1/|S|$. Any hypothesis with error below $1/|S|$ makes no mistakes on $S$. So check whether the output is consistent with $S$. If no consistent $h$ exists, the check always fails. If one exists, the check succeeds with probability at least $1-\delta$.</p>
+
   <div class="example" data-result="3-term DNF: hard to learn properly, easy to learn improperly">
     <p>A <em>3-term DNF</em> is a formula $T_1 \vee T_2 \vee T_3$ where each $T_c$ is a conjunction of literals.
       Pitt and Valiant (1988) showed that its consistency problem is NP-hard, by a reduction from graph 3-coloring.
       So 3-term DNF is not efficiently properly learnable unless $\mathrm{NP} = \mathrm{RP}$.</p>
     <p>But every 3-term DNF is also a 3-CNF:
       $$T_1 \vee T_2 \vee T_3 = \bigwedge_{u \in T_1,\ v \in T_2,\ w \in T_3} (u \vee v \vee w).$$
-      A 3-CNF is a conjunction over the $O(n^3)$ possible clauses. The elimination algorithm learns it in polynomial time.
+      Treat each of the $O(n^3)$ possible clauses $(u \vee v \vee w)$ as a new variable. Then a 3-CNF is a conjunction over these variables, and the elimination algorithm learns it in polynomial time.
       So the hardness comes from the required output format, not from the concept class.</p>
   </div>
 
@@ -60,10 +65,12 @@
     The common idea: if a class can compute pseudorandom functions, an efficient learner would distinguish them from random functions.</p>
   <ul>
     <li><strong>Kearns and Valiant (1994).</strong> Assuming problems such as breaking RSA are hard, Boolean formulas, deterministic finite automata, and constant-depth threshold circuits are not efficiently PAC learnable.</li>
-    <li><strong>Klivans and Sherstov (2009).</strong> A polynomial-time learner for intersections of $n^{\varepsilon}$ halfspaces would solve certain approximate lattice problems in the worst case. The reduction uses Regev's lattice-based cryptosystems.</li>
-    <li><strong>Daniely and Shalev-Shwartz (2016).</strong> Assuming that refuting random $K$-SAT formulas is hard, DNF formulas with $\omega(\log n)$ terms are not efficiently learnable.
+    <li><strong>Klivans and Sherstov (2009).</strong> A polynomial-time learner for intersections of $n^{c}$ halfspaces, for any constant $c &gt; 0$, would solve certain approximate lattice problems in the worst case. The reduction uses Regev's lattice-based cryptosystems.</li>
+    <li><strong>Daniely and Shalev-Shwartz (2016).</strong> Assuming that refuting random $k$-SAT formulas is hard, DNF formulas with $\omega(\log n)$ terms are not efficiently learnable.
       It was one of the first hardness-of-learning results based on an assumption other than cryptography.</li>
   </ul>
+
+  <p>These results separate two questions. The Fundamental Theorem says how many samples a learner needs. Complexity theory asks whether a learner can use them in polynomial time. The answer can be no, even when few samples suffice.</p>
 
   <h2>References</h2>
   <ul>
