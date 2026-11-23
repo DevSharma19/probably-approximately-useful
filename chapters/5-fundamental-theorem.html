@@ -86,7 +86,7 @@
     $m^{UC}_{\mathcal{H}}(\varepsilon,\delta) = O\big((d\log(1/\varepsilon) + \log(1/\delta))/\varepsilon^2\big)$.
     So ERM is an agnostic PAC learner with $m_{\mathcal{H}}(\varepsilon,\delta) \le m^{UC}_{\mathcal{H}}(\varepsilon/2,\delta)$.</p>
   <p>In the realizable case we can do better. ERM outputs a consistent $h$. We only need that no bad $h$ is consistent.
-    The ghost-sample argument from Chapter 4 adapts to this event:</p>
+    The argument behind the VC inequality in Chapter 4 adapts to this event:</p>
   <div class="theorem" data-name="(Realizable case; Blumer et al. 1989)">
     For $m \ge 8/\varepsilon$,
     $$\begin{aligned}&amp;\Pr_{S \sim \mathcal{D}^m}\big[\exists h \in \mathcal{H} : L_S(h) = 0 \text{ and } L_{\mathcal{D}}(h) &gt; \varepsilon\big] \\ &amp;\qquad\le 2\,\tau_{\mathcal{H}}(2m)\, 2^{-\varepsilon m/2}.\end{aligned}$$

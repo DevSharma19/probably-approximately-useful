@@ -23,32 +23,41 @@
     Alice is teaching Boris English. She starts with the word "banana".</p>
 
   <figure class="comic">
-    <a href="images/banana-comic.png" data-lightbox title="Enlarge"><img src="images/banana-comic.png" width="2880" height="2674" loading="lazy"
-      alt="Four-panel comic. 1: Alice points at a banana and says 'Banana!'. Boris wonders if it means yellow, fruit, curved, or banana. 2: She points at an old brown banana. Boris crosses out yellow and wonders about brown, rotten, or banana. 3: After many bananas (green, ripe, tiny, spotty), Boris crosses out yellow, brown, and rotten. Only banana is left. 4: Boris points to a banana he has never seen, in a fruit bowl, and says 'Banana!'. Alice says 'Yes!'."></a>
+    <a href="images/banana-comic.png" data-lightbox title="Enlarge"><img src="images/banana-comic.png" width="2880" height="2660" loading="lazy"
+      alt="Four-panel comic. 1: Alice points at a yellow banana and says 'Banana!'. Boris wonders if it means yellow, fruit, curved, or banana. 2: She points at a brown banana and says 'Banana!'. Boris crosses out yellow. 3: She points at an apple and says 'Not banana!'. Boris crosses out fruit. 4: She points at a curved boomerang and says 'Not banana!'. Boris crosses out curved. Only banana is left."></a>
     <figcaption>Learning "banana" from examples. Tap to enlarge.</figcaption>
   </figure>
 
   <ol>
-    <li>Alice points at a banana and says "banana". Boris does not know what the word means. It could mean yellow, fruit, curved, or banana.</li>
-    <li>She points at a second banana, an old brown one. This rules out yellow. Boris now wonders about brown or rotten.</li>
-    <li>She shows more bananas: green, ripe, tiny, spotty. Each one rules out more guesses. Only "banana" fits them all.</li>
-    <li>Boris sees a banana he has never seen before. He labels it himself, and he is right.</li>
+    <li>Alice points at a yellow banana and says "banana". Boris does not know what the word means. It could mean yellow, fruit, curved, or banana.</li>
+    <li>She points at a brown banana. It is also a banana, so the word does not mean yellow.</li>
+    <li>She points at an apple and says "not banana". An apple is a fruit, so the word does not mean fruit.</li>
+    <li>She points at a curved boomerang and says "not banana". So the word does not mean curved. Only "banana" fits every example.</li>
   </ol>
-  <p>Boris's guesses form a <strong>hypothesis class</strong>. Each example rules out the guesses that disagree with it.
-    Boris has learned when he labels a new example correctly.</p>
-
-  <p>The main application is machine learning. The question we care about most is how many examples a learner needs.
-    The answer depends on the hypothesis class $\mathcal{H}$, and in particular on whether it is finite or infinite.</p>
-  <p>For a finite class $\mathcal{H}$, about $\log|\mathcal{H}|/\varepsilon$ examples suffice. But most useful classes are infinite.
-    Thresholds on $\mathbb{R}$ already have infinitely many hypotheses, and they are easy to learn.</p>
-  <p>The right measure of size is the <strong>VC dimension</strong>. The main result of this site is the Fundamental Theorem of PAC Learning:
-    a class is learnable from finitely many samples <strong>if and only if</strong> its VC dimension is finite.
-    The last chapter asks the complexity theorist's question: when is learning also <em>efficient</em>?</p>
+  <p>Boris's guesses form a collection known as a <strong>hypothesis class</strong>. Each example helps to eliminate hypotheses that are inconsistent with that example.</p>
+  <p>Learning theory's model of machine learning operates the same way. A program sees labeled examples and must assign labels to new, unseen examples. Since Boris will not encounter every banana in existence, we don't expect him to classify every single one correctly. Instead, we require that the error rate on new examples does not exceed a bound $\varepsilon$. This is <strong>approximately correct</strong>. Moreover, Alice selects the examples from a distribution that isn't known to Boris. Therefore, we require that he be "approximately correct" with a probability of at least $1-\delta$ based on the examples he has seen. This is referred to as being <strong>probably approximately correct</strong>. Together, a hypothesis class which is able to achieve this after a fixed number of examples is said to be <strong>PAC learnable</strong>. There is an additional requirement that the number of examples doesn't depend on the specific distribution Alice chooses. The main question in PAC learning is: how many examples does Boris need?</p>
+  <p>The answer depends on two factors. First, the hypothesis class may be finite or infinite. Second, there might exist a hypothesis that is perfectly accurate. This scenario is called <strong>realizable</strong>. If no hypothesis is perfect, the situation is termed <strong>agnostic</strong>; in this case, we aim for the learning algorithm to perform nearly as well as the best hypothesis within that class.</p>
+  <p>Suppose the hypothesis class is finite and the scenario is realizable. In that case, the number of examples Boris requires scales with $\log|\mathcal{H}|$. However, in practice, useful hypothesis classes are often infinite. An example of this is the use of <strong>thresholds</strong> over the set of real numbers ($\mathbb{R}$). Choose a threshold value $t$, and label $x$ as "positive" if $x \ge t$. There is a possible hypothesis for every real number $t$, meaning $\log|\mathcal{H}|$ is infinite. Nevertheless, these thresholds are easy to learn.</p>
+  <p>Therefore, counting the number of hypotheses is not an accurate metric. Since a learner only sees finitely many examples, what matters instead is how many ways the hypothesis class can label the examples it sees. The <strong>VC dimension</strong> measures this. It is the size of the largest set that $\mathcal{H}$ can label in every possible way. For thresholds it is 1.</p>
+  <p>The key result we will discuss is the <strong>Fundamental Theorem of PAC Learning</strong>: a hypothesis class $\mathcal{H}$ is PAC-learnable <em>if and only if</em> its VC dimension is finite. This holds for both the realizable and agnostic settings. The two directions address different aspects: if the VC dimension is finite, a simple learning strategy works (pick the hypothesis that minimizes errors on the training samples). If it is infinite, no PAC learner can learn the class.</p>
+  <p>These results are fundamentally about the number of examples, not computation. To connect this back to complexity theory, the final section poses a question that challenges researchers: when is learning actually <strong>efficient</strong>?</p>
 
   <h2>Who this is for</h2>
   <p>Students who have taken 15-455 (Undergraduate Complexity Theory). We assume comfort with proofs,
     asymptotic notation, and basic discrete probability (union bound, expectation, concentration).
     No machine learning background is needed.</p>
+
+  <div id="toc">
+  <h2>Chapters</h2>
+  <ol>
+    <li><a href="chapters/1-pac.html">Learning from Samples</a>: the PAC model and finite hypothesis classes</li>
+    <li><a href="chapters/2-vc-dimension.html">Shattering &amp; VC Dimension</a>: measuring the size of infinite classes (interactive)</li>
+    <li><a href="chapters/3-sauer-shelah.html">The Sauer–Shelah Lemma</a>: from exponential to polynomial (interactive)</li>
+    <li><a href="chapters/4-uniform-convergence.html">Uniform Convergence</a>: why empirical error tracks true error</li>
+    <li><a href="chapters/5-fundamental-theorem.html">The Fundamental Theorem</a>: finite VC dimension ⇔ PAC learnable</li>
+    <li><a href="chapters/6-beyond.html">Beyond</a>: connections to complexity theory</li>
+  </ol>
+  </div>
 
   <h2>Notation</h2>
   <table class="notation">
@@ -62,19 +71,6 @@
     <tr><td>$d$</td><td>VC dimension of $\mathcal{H}$</td></tr>
     <tr><td>$\tau_{\mathcal{H}}(m)$</td><td>growth function: the most labelings $\mathcal{H}$ gives any $m$ points</td></tr>
   </table>
-
-  <div id="toc">
-  <h2>Chapters</h2>
-  <ol>
-    <li><a href="chapters/1-pac.html">Learning from Samples</a>: the PAC model and finite hypothesis classes</li>
-    <li><a href="chapters/2-vc-dimension.html">Shattering &amp; VC Dimension</a>: measuring the size of infinite classes (interactive)</li>
-    <li><a href="chapters/3-sauer-shelah.html">The Sauer–Shelah Lemma</a>: from exponential to polynomial (interactive)</li>
-    <li><a href="chapters/4-uniform-convergence.html">Uniform Convergence</a>: why empirical error tracks true error</li>
-    <li><a href="chapters/5-fundamental-theorem.html">The Fundamental Theorem</a>: finite VC dimension ⇔ PAC learnable</li>
-    <li><a href="chapters/6-beyond.html">Beyond</a>: connections to complexity theory, recent results, and deep learning</li>
-  </ol>
-  </div>
-  <p>Scroll down to read the whole site in one go, or jump to a chapter from the bar at the top.</p>
 
   <!-- nav.js loads every chapter in here (single-scroll view) -->
   <div id="chapters"></div>

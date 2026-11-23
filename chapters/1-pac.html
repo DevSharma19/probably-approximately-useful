@@ -19,19 +19,20 @@
     <em>labeled examples</em> $\mathcal{X} \times \{0,1\}$. The learner sees a sample
     $S = ((x_1, y_1), \dots, (x_m, y_m))$ drawn i.i.d. from $\mathcal{D}$, and outputs a hypothesis $h : \mathcal{X} \to \{0,1\}$.
     It chooses $h$ from a fixed <strong>hypothesis class</strong> $\mathcal{H}$.</p>
-  <p>The learner does not know $\mathcal{D}$. It only sees $S$.</p>
+  <p>Note that in our setup, the learner does not know anything about the distribution $\mathcal{D}$. It only sees the sample $S$.</p>
 
   <div class="definition" data-name="(True and empirical error)">
     $L_{\mathcal{D}}(h) = \Pr_{(x,y) \sim \mathcal{D}}[h(x) \neq y]$ and
     $L_S(h) = \frac{1}{m}\left|\{ i : h(x_i) \neq y_i\}\right|$.
   </div>
-  <p>$L_{\mathcal{D}}(h)$ is what we care about. $L_S(h)$ is what the learner can compute.</p>
+  <p>We can distinguish two types of error of the model. $L_{\mathcal{D}}(h)$ is the true error over any examples.
+    However, we cannot compute this since we don't know what $\mathcal{D}$ is. Instead, $L_S(h)$ is a proxy that we use and can compute.</p>
 
   <div class="definition" data-name="(Realizability assumption)">
     There exists $h^\star \in \mathcal{H}$ with $L_{\mathcal{D}}(h^\star) = 0$.
   </div>
-  <p>Some hypothesis in the class labels everything correctly. Then $L_S(h^\star) = 0$ with probability 1.
-    Chapters 1–3 assume realizability. Chapter 4 drops it.</p>
+  <p>Note that if the hypothesis class is realizable and $L_{\mathcal{D}}(h^\star) = 0$ then $L_S(h^\star) = 0$ too.
+    For the remainder of chapters 1 to 3, we will assume realizability throughout. In chapter 4, we will discuss the agnostic case.</p>
 
   <div class="definition" data-name="(PAC learnability)">
     A hypothesis class $\mathcal{H}$ is <em>PAC learnable</em> if there exist a function
@@ -40,7 +41,7 @@
     given $m \ge m_{\mathcal{H}}(\varepsilon,\delta)$ i.i.d. examples from $\mathcal{D}$, $A$ outputs $h$ with
     $$\Pr_{S \sim \mathcal{D}^m}\big[L_{\mathcal{D}}(h) \le \varepsilon\big] \ge 1 - \delta.$$
   </div>
-  <p>The definition has three parts.</p>
+  <p>As mentioned in the intro, the definition has three parts.</p>
   <ul>
     <li><strong>Approximately correct:</strong> the error is at most $\varepsilon$.</li>
     <li><strong>Probably:</strong> this holds with probability at least $1 - \delta$. Some failure is unavoidable. For example, every sample point could be the same $x$.</li>
@@ -49,12 +50,12 @@
   <div class="definition" data-name="(Sample complexity)">
     The smallest valid $m_{\mathcal{H}}$ is the <strong>sample complexity</strong> of $\mathcal{H}$.
   </div>
-  <p>The role of $\delta$ matches the error probability of a randomized algorithm in RP or BPP.</p>
+  <p>One can consider the slightly similar role of $\delta$ to the error probability of a randomized algorithm in RP or BPP.
+    However, note that in this case, we write $m$ to be a function of $\delta$ and $\varepsilon$.</p>
 
   <h2>Empirical Risk Minimization</h2>
-  <p>$\mathrm{ERM}_{\mathcal{H}}$ outputs any $h \in \mathcal{H}$ that minimizes $L_S(h)$.
-    Under realizability, $L_S(h^\star) = 0$, so ERM outputs some $h$ with $L_S(h) = 0$.
-    Such an $h$ is <em>consistent</em> with $S$.</p>
+  <p>Here is an example of one of the simplest learners. Given a hypothesis class $\mathcal{H}$, pick the hypothesis $h \in \mathcal{H}$ that makes the fewest mistakes on $S$. This learner is called <strong>empirical risk minimization</strong>, or <strong>ERM</strong>. Here, "risk" is another word for error.</p>
+  <p>$\mathrm{ERM}_{\mathcal{H}}$ outputs any $h \in \mathcal{H}$ that minimizes $L_S(h)$. If there are multiple such $h$ that yield the same minimal value, it may output any of them. In the realizable setting, we have $L_S(h^\star) = 0$; therefore, $\mathrm{ERM}$ will output an $h$ such that $L_S(h) = 0$. Such an $h$ is said to be <strong>consistent</strong> with $S$.</p>
 
   <div class="theorem" data-name="(Finite classes)">
     Let $\mathcal{H}$ be finite. Under realizability, ERM is a PAC learner with sample complexity
@@ -76,9 +77,7 @@
   </div>
   <p>The sample cost grows with description length.</p>
 
-  <p>Now, consider thresholds on $\mathbb{R}$: $h_t(x) = \mathbb{1}[x \ge t]$ for $t \in \mathbb{R}$.
-    This class is infinite, so the bound above says nothing.
-    Therefore, $\ln|\mathcal{H}|$ is the wrong measure of size. Chapter 2 defines the right one.</p>
+  <p>ERM can also fail. Let $\mathcal{X} = [0,1]$ and $\mathcal{H}$ be the set of all functions $\mathcal{X} \to \{0,1\}$. Let $\mathcal{D}$ be uniform on $[0,1]$, with every label equal to $1$. Some $h \in \mathcal{H}$ labels the points of $S$ with $1$ and every other point with $0$. This $h$ is consistent with $S$, so ERM may output it. But it is wrong on every point outside $S$. The key distinction is that the hypothesis class is infinite, so the bound above says nothing. Therefore, $\ln|\mathcal{H}|$ is the wrong measure of size. Chapter 2 defines the right one.</p>
 
 </main>
 <script src="../js/nav.js"></script>

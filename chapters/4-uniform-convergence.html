@@ -15,8 +15,7 @@
 
 
   <h2>Dropping realizability</h2>
-  <p>Now remove the realizability assumption. The labels may be noisy, or no hypothesis in $\mathcal{H}$ may be perfect.
-    We can no longer ask for error $\le \varepsilon$. Instead, we ask to be nearly as good as the best hypothesis in the class.</p>
+  <p>Now, we will remove the realizability assumption. No hypothesis in $\mathcal{H}$ may be perfect. We can no longer ask for error $\le \varepsilon$. Instead, we ask to be nearly as good as the best hypothesis in the class.</p>
 
   <div class="definition" data-name="(Agnostic PAC learnability)">
     $\mathcal{H}$ is <em>agnostic PAC learnable</em> if there exist $m_{\mathcal{H}} : (0,1)^2 \to \mathbb{N}$ and an algorithm $A$ such that for every
@@ -24,15 +23,15 @@
     i.i.d. examples from $\mathcal{D}$, $A$ outputs $h$ with
     $$\Pr_{S \sim \mathcal{D}^m}\Big[L_{\mathcal{D}}(h) \le \min_{h' \in \mathcal{H}} L_{\mathcal{D}}(h') + \varepsilon\Big] \ge 1 - \delta.$$
   </div>
-  <p>When realizability holds, $\min_{h'} L_{\mathcal{D}}(h') = 0$ and this is exactly PAC learnability from Chapter 1.</p>
+  <p>Clearly, when realizability holds, $\min_{h'} L_{\mathcal{D}}(h') = 0$ and this is exactly PAC learnability from Chapter 1.</p>
 
   <h2>Uniform convergence</h2>
-  <p>ERM works when the empirical error $L_S(h)$ is close to the true error $L_{\mathcal{D}}(h)$ for <em>every</em>
-    $h \in \mathcal{H}$ at the same time, not just for one fixed $h$.</p>
+  <p>Recall that ERM chooses the hypothesis with the smallest error. This is a good choice only if empirical error is a good estimate of true error. Specifically, we need $L_S(h)$ to be close to $L_{\mathcal{D}}(h)$ for every $h \in \mathcal{H}$. We require this property over all $h$ since ERM's choice depends on $S$. A sample with this property is called <strong>representative</strong>.</p>
 
   <div class="definition" data-name="(ε-representative sample)">
     $S$ is $\varepsilon$-representative if $|L_S(h) - L_{\mathcal{D}}(h)| \le \varepsilon$ for all $h \in \mathcal{H}$.
   </div>
+  <p>Moreover, we say a class has the <strong>uniform convergence property</strong> if, for every distribution $\mathcal{D}$, a large enough sample is representative with high probability. "Uniform" means the guarantee holds for all of $\mathcal{H}$ at once.</p>
   <div class="definition" data-name="(Uniform convergence property)">
     $\mathcal{H}$ has the uniform convergence property if there is $m^{UC}_{\mathcal{H}}(\varepsilon,\delta)$ such that for every $\mathcal{D}$,
     a sample of size $m \ge m^{UC}_{\mathcal{H}}(\varepsilon,\delta)$ is $\varepsilon$-representative with probability at least $1-\delta$.
@@ -50,31 +49,36 @@
     $m_{\mathcal{H}}(\varepsilon,\delta) \le m^{UC}_{\mathcal{H}}(\varepsilon/2, \delta)$.
     Take $m \ge m^{UC}_{\mathcal{H}}(\varepsilon/2,\delta)$. With probability at least $1-\delta$, $S$ is $\frac{\varepsilon}{2}$-representative, and the lemma applies.</p>
 
-  <h2>Why one hypothesis is not enough</h2>
-  <p>Fix $h$ before seeing $S$. Then $L_S(h)$ is an average of $m$ i.i.d. indicators with mean $L_{\mathcal{D}}(h)$. Hoeffding's inequality gives
-    $$\Pr\big[|L_S(h) - L_{\mathcal{D}}(h)| &gt; \varepsilon\big] \le 2e^{-2m\varepsilon^2}.$$
-    This does not apply to $h_S$, because $h_S$ is chosen after seeing $S$.
-    For finite $\mathcal{H}$, a union bound over all of $\mathcal{H}$ gives uniform convergence with
-    $m^{UC}_{\mathcal{H}}(\varepsilon,\delta) \le \left\lceil \frac{\ln(2|\mathcal{H}|/\delta)}{2\varepsilon^2} \right\rceil$.
-    Infinite classes need another idea.</p>
+  <h2>From one hypothesis to the whole class</h2>
+  <p>Fix $h$ before seeing $S$. Then $L_S(h)$ is an average of $m$ independent trials with mean $L_{\mathcal{D}}(h)$. By Hoeffding's inequality,
+    $$\Pr\big[|L_S(h) - L_{\mathcal{D}}(h)| &gt; \varepsilon\big] \le 2e^{-2m\varepsilon^2}.$$</p>
+  <p>This does not apply to ERM's output $h_S$, because $h_S$ is chosen to fit $S$. In the example from Chapter 1, $L_S(h_S) = 0$ but $L_{\mathcal{D}}(h_S) = 1$.</p>
+  <p>So we need the estimate to hold for every $h \in \mathcal{H}$ at once. Let $\mathcal{H}$ be finite.
+    For each $h$, let $B_h$ be the event that $|L_S(h) - L_{\mathcal{D}}(h)| &gt; \varepsilon$.
+    The sample fails if some $B_h$ happens, that is, if the union $\bigcup_{h \in \mathcal{H}} B_h$ happens.
+    The union bound says the probability of a union is at most the sum of the probabilities.
+    Hoeffding bounds each term by $2e^{-2m\varepsilon^2}$, and there are $|\mathcal{H}|$ terms. So
+    $$\begin{aligned}&amp;\Pr\Big[\exists h \in \mathcal{H} : |L_S(h) - L_{\mathcal{D}}(h)| &gt; \varepsilon\Big] \\ &amp;\qquad\le \sum_{h \in \mathcal{H}} \Pr[B_h] \le 2|\mathcal{H}|\,e^{-2m\varepsilon^2}.\end{aligned}$$
+    This is at most $\delta$ when $m \ge \ln(2|\mathcal{H}|/\delta)/(2\varepsilon^2)$.</p>
+  <div class="theorem" data-name="(Finite classes are agnostic PAC learnable)">
+    Let $\mathcal{H}$ be finite. Then $\mathcal{H}$ has the uniform convergence property with
+    $$m^{UC}_{\mathcal{H}}(\varepsilon,\delta) \le \left\lceil \frac{\ln(2|\mathcal{H}|/\delta)}{2\varepsilon^2} \right\rceil.$$
+    So ERM is an agnostic PAC learner for $\mathcal{H}$ with
+    $$\begin{aligned}m_{\mathcal{H}}(\varepsilon,\delta) &amp;\le m^{UC}_{\mathcal{H}}(\varepsilon/2,\delta) \\ &amp;\le \left\lceil \frac{2\ln(2|\mathcal{H}|/\delta)}{\varepsilon^2} \right\rceil.\end{aligned}$$
+  </div>
+  <p>For infinite $\mathcal{H}$, the next section replaces $|\mathcal{H}|$ with the growth function.</p>
 
   <h2>Finite VC dimension ⇒ uniform convergence</h2>
   <p>The finite-class bound fails for infinite $\mathcal{H}$ because its union bound runs over infinitely many hypotheses.
     But most of those hypotheses are redundant on any given sample. Two hypotheses that label $S$ the same way have the same empirical error.
     So on a sample of size $m$, $\mathcal{H}$ shows at most $\tau_{\mathcal{H}}(m)$ distinct behaviors.
     Let $d = \mathrm{VCdim}(\mathcal{H})$. By Sauer–Shelah, that is at most $(em/d)^d$ once $m \ge d$. We would like to replace $|\mathcal{H}|$ in the union bound with this number.</p>
-  <p>There is one catch. The true error $L_{\mathcal{D}}(h)$ depends on $h$ everywhere, not only on the sample.
-    Two hypotheses that agree on $S$ can have different true errors.
-    The fix is to draw a second, independent sample $S'$ of the same size, called a <em>ghost sample</em>.
-    If $L_S(h)$ is far from $L_{\mathcal{D}}(h)$, then it is likely also far from $L_{S'}(h)$.
-    Both of these errors depend only on the $2m$ points in $S$ and $S'$. On those points, $\mathcal{H}$ has at most $\tau_{\mathcal{H}}(2m)$ behaviors.
-    This is why $\tau_{\mathcal{H}}(2m)$ appears in the result below.</p>
 
   <div class="theorem" data-name="(VC inequality)">
     For every $\mathcal{H}$, every $\mathcal{D}$, and every $m$ with $m\varepsilon^2 \ge 2$,
     $$\begin{aligned}&amp;\Pr_{S \sim \mathcal{D}^m}\Big[\exists h \in \mathcal{H} : |L_S(h) - L_{\mathcal{D}}(h)| &gt; \varepsilon\Big] \\ &amp;\qquad\le 4\,\tau_{\mathcal{H}}(2m)\, e^{-m\varepsilon^2/8}.\end{aligned}$$
   </div>
-  <p>The proof is beyond the scope of this discussion. It follows the ghost-sample idea above.
+  <p>The proof is beyond the scope of this discussion.
     See Vapnik and Chervonenkis (1971), or Anthony and Bartlett (1999), Theorem 4.3.</p>
   <p>Compare the two bounds on the probability that some $h$ is far from its true error:
     $$2\,|\mathcal{H}|\, e^{-2m\varepsilon^2} \qquad \text{versus} \qquad 4\,\tau_{\mathcal{H}}(2m)\, e^{-m\varepsilon^2/8}.$$

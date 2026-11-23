@@ -83,7 +83,7 @@ async function loadAllChapters(header) {
       return new DOMParser().parseFromString(await res.text(), "text/html");
     }));
   } catch (e) {
-    // Leave the plain chapter list (in #toc) as the fallback.
+    // The chapter list (#toc) keeps its links to the chapter pages.
     renderMath(document.body);
     return;
   }
@@ -95,7 +95,11 @@ async function loadAllChapters(header) {
     section.append(...doc.querySelector("main").childNodes);
     container.append(section);
   });
-  document.getElementById("toc")?.remove();
+  // Point the chapter list at the in-page sections.
+  document.querySelectorAll('#toc a[href^="chapters/"]').forEach((a) => {
+    const i = CHAPTERS.findIndex((c) => "chapters/" + c.file === a.getAttribute("href"));
+    if (i !== -1) a.href = `#ch-${i + 1}`;
+  });
 
   renderMath(document.body);
   mountWidgets();

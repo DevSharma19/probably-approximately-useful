@@ -14,15 +14,13 @@
   <h1>3. The Sauer–Shelah Lemma</h1>
 
 
-  <p>Chapter 2 asked whether $\mathcal{H}$ can realize every labeling of one set.
-    This chapter asks how many labelings it can realize on $m$ points, as a function of $m$.
-    That count, not $|\mathcal{H}|$, controls how many samples a learner needs.</p>
+  <p>Chapter 2 asked whether $\mathcal{H}$ can realize every labeling of one set. Now, we can take this one step further by asking exactly how many labelings it can realize on $m$ points, as a function of $m$. This is the growth function! In fact, as we'll see in chapter 4, it's the growth function that actually controls how many samples a learner needs.</p>
 
   <h2>The growth function</h2>
   <div class="definition" data-name="(Growth function)">
     $\tau_{\mathcal{H}}(m) = \max_{C \subseteq \mathcal{X},\, |C| = m} |\mathcal{H}_C|$.
   </div>
-  <p>The maximum is over all sets of $m$ points. So $\tau_{\mathcal{H}}(m)$ is a worst case.
+  <p>Here, we are taking the maximum over all subsets of $\mathcal{X}$ consisting of $m$ points. So $\tau_{\mathcal{H}}(m)$ is a worst case.
     It is the largest number of distinct behaviors $\mathcal{H}$ can show on $m$ points.</p>
   <p>Two simple bounds hold.</p>
   <ul>
@@ -37,8 +35,7 @@
       <li><em>Intervals.</em> The points labeled 1 form a contiguous run, possibly empty. A nonempty run is fixed by its first and last point. So $\tau_{\mathcal{H}}(m) = \binom{m+1}{2} + 1$.</li>
     </ul>
   </div>
-  <p>Both classes are infinite, yet both growth functions are polynomials in $m$. The degree matches the VC dimension: 1 for thresholds, 2 for intervals.
-    The Sauer–Shelah lemma says this always happens.</p>
+  <p>The key observation here is that for both of these classes, there is a fundamental relation between their growth functions and VC dimensions. Note that both their growth functions are polynomial in $m$. And moreover, the degree of this polynomial matches the VC dimension: 1 for thresholds, 2 for intervals. The Sauer–Shelah lemma says this always happens.</p>
 
   <h2>The lemma</h2>
   <div class="lemma" data-name="(Sauer–Shelah–Perles)">
@@ -46,13 +43,9 @@
     $$\tau_{\mathcal{H}}(m) \le \sum_{i=0}^{d} \binom{m}{i}.$$
     If also $m \ge d \ge 1$, then $\sum_{i=0}^{d}\binom{m}{i} \le \left(\frac{em}{d}\right)^d$.
   </div>
-  <p>Read the bound as a count. $\binom{m}{i}$ is the number of subsets of size $i$. So the sum counts the subsets of an $m$-point set with at most $d$ elements.
-    For fixed $d$, this is $O(m^d)$. The form $(em/d)^d$ is less exact but easier to use in calculations.</p>
-  <p>There is no middle ground. If $\mathrm{VCdim}(\mathcal{H}) = \infty$, then $\tau_{\mathcal{H}}(m) = 2^m$ for every $m$.
-    If $\mathrm{VCdim}(\mathcal{H}) = d$, then $\tau_{\mathcal{H}}(m)$ is at most a polynomial of degree $d$.
-    So every growth function is either $2^m$ for all $m$ or polynomially bounded.</p>
-  <p>The bound is tight. Thresholds and intervals meet it with equality, since $m + 1 = \binom{m}{0} + \binom{m}{1}$ and $\binom{m+1}{2} + 1 = \binom{m}{0} + \binom{m}{1} + \binom{m}{2}$.
-    So does the class of indicators of sets with at most $d$ elements: on any $m$ points, it realizes exactly the subsets of size at most $d$.</p>
+  <p>One should read this bound as a count. $\binom{m}{i}$ is the number of subsets of size $i$. So the sum counts the subsets of an $m$-point set with at most $d$ elements. For fixed $d$, this is $O(m^d)$. The form $(em/d)^d$ is an upper bound that's easier to use in calculations.</p>
+  <p>An important side note is that there is no middle ground. If $\mathrm{VCdim}(\mathcal{H}) = \infty$, then $\tau_{\mathcal{H}}(m) = 2^m$ for every $m$. If $\mathrm{VCdim}(\mathcal{H}) = d$, then $\tau_{\mathcal{H}}(m)$ is at most a polynomial of degree $d$. So every growth function is either $2^m$ for all $m$ or polynomially bounded.</p>
+  <p>Finally, one may notice from our previous examples that the bound is tight. For thresholds and intervals: $m + 1 = \binom{m}{0} + \binom{m}{1}$ and $\binom{m+1}{2} + 1 = \binom{m}{0} + \binom{m}{1} + \binom{m}{2}$.</p>
 
   <h2>The growth plot</h2>
   <p>The y-axis is $\log_2$, so $2^m$ is a straight line. The Sauer–Shelah bound equals $2^m$ for $m \le d$.
@@ -61,8 +54,7 @@
   <div class="widget" data-widget="growth"></div>
 
   <h2>Proof</h2>
-  <p>The proof counts shattered subsets instead of labelings. It charges each labeling of $C$ to a different shattered subset of $C$.
-    Every shattered subset has at most $d$ elements, so it only remains to count small subsets.</p>
+  <p>Since it's difficult to count labelings directly, we prove a stronger claim on the subsets of $C$ that $\mathcal{H}$ shatters. It shows that $\mathcal{H}$ has at most as many labelings on $C$ as it has shattered subsets of $C$. Every shattered subset has at most $d$ elements. So it only remains to count subsets of size at most $d$.</p>
   <div class="lemma" data-name="(Stronger claim)">
     For every class $\mathcal{H}$ and every finite $C \subseteq \mathcal{X}$,
     $$|\mathcal{H}_C| \le \big|\{B \subseteq C : \mathcal{H} \text{ shatters } B\}\big|.$$
@@ -72,7 +64,7 @@
   <p>The induction removes one point $c_1$. Labelings of $C$ that differ only at $c_1$ merge into one labeling of the remaining points.
     We count the merged labelings and the merged pairs separately. Each count is a smaller instance of the claim.</p>
   <details class="proof"><summary>Proof</summary>
-    <p>Induction on $m = |C|$. For $m = 0$: if $\mathcal{H}$ is nonempty, $\mathcal{H}_C$ has one element (the empty labeling) and the empty set is shattered, so both sides equal 1. If $\mathcal{H}$ is empty, both sides equal 0. The induction step also applies the claim to a subclass $\mathcal{H}'$ that may be empty, so this case matters.</p>
+    <p>Induction on $m = |C|$. For $m = 0$: if $\mathcal{H}$ is nonempty, $\mathcal{H}_C$ has one element (the empty labeling) and the empty set is shattered, so both sides equal $1$. If $\mathcal{H}$ is empty, both sides equal $0$. The induction step also applies the claim to a subclass $\mathcal{H}'$ that may be empty, so this case matters.</p>
     <p>Let $m \ge 1$ and $C = \{c_1, \dots, c_m\}$. Let $C' = \{c_2, \dots, c_m\}$. Write $Y = \mathcal{H}_C$. Define</p>
     <ul>
       <li>$Y_0 = \{(y_2, \dots, y_m) : (0, y_2, \dots, y_m) \in Y \text{ or } (1, y_2, \dots, y_m) \in Y\}$,</li>
@@ -97,13 +89,9 @@
   </details>
 
   <h2>Why this matters</h2>
-  <p>Chapter 1 bounded the sample size by $\ln(|\mathcal{H}|/\delta)/\varepsilon$. Its proof used a union bound over every hypothesis in $\mathcal{H}$.
-    For infinite $\mathcal{H}$ that union bound is useless.</p>
-  <p>On a fixed sample, two hypotheses with the same labels look identical. So a union bound only needs one hypothesis per labeling.
-    Chapter 4 makes this precise using a second sample, so the count becomes $\tau_{\mathcal{H}}(2m)$. Compare the two quantities:
-    $$\ln|\mathcal{H}| \qquad \text{versus} \qquad \ln \tau_{\mathcal{H}}(2m) \le d \ln\frac{2em}{d}.$$
-    The right side is finite whenever $d$ is finite. It grows only logarithmically in $m$, while the sample size grows linearly.
-    So for large enough $m$ the sample wins. This is why finite VC dimension gives learnability.</p>
+  <p>Recall the proof for finite classes in Chapter 1. A hypothesis $h$ is bad if $L_{\mathcal{D}}(h) &gt; \varepsilon$. ERM fails only if some bad hypothesis is consistent with $S$. A fixed bad hypothesis is consistent with $S$ with probability at most $e^{-\varepsilon m}$. A union bound over all bad hypotheses gives a failure probability of at most $|\mathcal{H}|\, e^{-\varepsilon m}$. If $\mathcal{H}$ is infinite, this bound says nothing.</p>
+  <p>Now, suppose two hypotheses give the same labeling of the sample. Then either both are consistent with $S$ or neither is. So the union bound only needs to count labelings of the sample, not hypotheses. Chapter 5 proves a bound of this kind. The failure probability is at most $2\,\tau_{\mathcal{H}}(2m)\, e^{-c\varepsilon m}$ for some constant $c$.</p>
+  <p>This is where Sauer–Shelah comes in. This bound is small only if $\tau_{\mathcal{H}}(2m)$ is small. If $\mathrm{VCdim}(\mathcal{H}) = d$, Sauer–Shelah gives $\tau_{\mathcal{H}}(2m) \le (2em/d)^d$ for $2m \ge d$. This grows only polynomially in $m$, while $e^{-c\varepsilon m}$ shrinks exponentially, so for large $m$ the bound is small.</p>
 
 </main>
 <script src="../js/nav.js"></script>
